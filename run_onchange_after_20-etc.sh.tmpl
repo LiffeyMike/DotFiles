@@ -12,7 +12,7 @@ for f in $(find etc -type f | sort); do
         echo "installing /$f"
         sudo install -Dm644 "$f" "/$f"
         case "$f" in
-            etc/modprobe.d/*) rebuild_initramfs=1 ;;
+            etc/modprobe.d/* | etc/mkinitcpio.conf.d/*) rebuild_initramfs=1 ;;
             etc/systemd/*) reload_systemd=1 ;;
         esac
     fi
@@ -22,7 +22,7 @@ if [ "$reload_systemd" = 1 ]; then
     sudo systemctl daemon-reload
 fi
 
-# modprobe.d options for early-loaded modules (nvidia) are baked into the initramfs.
+# modprobe.d options and mkinitcpio drop-ins are baked into the initramfs.
 if [ "$rebuild_initramfs" = 1 ]; then
     if command -v mkinitcpio >/dev/null; then
         sudo mkinitcpio -P

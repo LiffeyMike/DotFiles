@@ -28,6 +28,10 @@ icon_folders = "blue"   # Papirus folder colour: blue violet nordic orange indig
 [layout]
 waybar = "pills"        # layouts/waybar/<name>.jsonc + .css
 
+# Per-app choices that are names rather than colours.
+[apps]
+nvim = "habamax"        # Neovim colourscheme (plugin listed in ~/.config/nvim/lua/plugins/theme.lua)
+
 # Required palette roles (every theme defines all of them):
 #   bg bg_alt bg_dark surface0 surface1 surface2 overlay subtext fg
 #   red orange yellow green teal cyan blue purple pink accent accent2

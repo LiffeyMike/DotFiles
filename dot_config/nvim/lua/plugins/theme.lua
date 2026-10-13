@@ -1,40 +1,37 @@
+-- The colourscheme follows the system theme; see lua/config/systemtheme.lua. Every scheme a
+-- theme can name is listed here (lazy-loaded: :colorscheme pulls in the right plugin).
+-- Backgrounds are transparent so the terminal's themed opacity shows through.
 return {
 	{
-		"tokyonight.nvim",
+		"folke/tokyonight.nvim",
 		opts = {
 			transparent = true,
-			styles = {
-				sidebars = "transparent",
-				floats = "transparent",
-			},
+			styles = { sidebars = "transparent", floats = "transparent" },
 		},
 	},
 	{
-		"baliestri/aura-theme",
-		lazy = false,
-		priority = 1000,
-		--config = function(plugin)
-		--	vim.opt.rtp:append(plugin.dir .. "/packages/neovim")
-		--	vim.cmd([[colorscheme aura-dark]])
-		--end,
+		"catppuccin/nvim",
+		name = "catppuccin",
+		opts = { transparent_background = true },
 	},
-	{ "dasupradyumna/midnight.nvim", lazy = false, priority = 1000 },
 	{
-		"scottmckendry/cyberdream.nvim",
-		lazy = false,
-		priority = 1000,
-		opts = {
-			--transparent = true,
-			--styles = {
-			--	sidebars = "transparent",
-			--	floats = "transparent",
-			--},
-		},
+		"ellisonleao/gruvbox.nvim",
+		lazy = true,
+		opts = { transparent_mode = true },
+	},
+	{
+		"gbprod/nord.nvim",
+		lazy = true,
+		opts = { transparent = true },
 	},
 	{
 		"LazyVim/LazyVim",
 		opts = {
-			colorscheme = "cyberdream",
+			colorscheme = function()
+				local systemtheme = require("config.systemtheme")
+				systemtheme.apply()
+				systemtheme.watch()
+			end,
 		},
 	},
 }

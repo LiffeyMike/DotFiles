@@ -13,6 +13,9 @@ term_opacity = 0.85
 [layout]
 waybar = "bar"
 
+[apps]
+nvim = "tokyonight-night"
+
 [palette]
 bg = "1a1b26"
 bg_alt = "16161e"

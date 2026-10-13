@@ -48,6 +48,7 @@ OUTPUTS = {
     "gtk.css": "templates/gtk.css",
     "ghostty.conf": "templates/ghostty.conf",
     "tmux.conf": "templates/tmux.conf",
+    "nvim.lua": "templates/nvim.lua",
 }
 
 ROLES = """bg bg_alt bg_dark surface0 surface1 surface2 overlay subtext fg
@@ -246,7 +247,7 @@ def render(t):
         wall_path = gradient_wallpaper(t)
 
     ctx = {"theme": t, "p": t["palette"], "look": t["look"], "layout": t["layout"],
-           "term": t["term"], "wallpaper_path": str(wall_path)}
+           "apps": t["apps"], "term": t["term"], "wallpaper_path": str(wall_path)}
 
     out = STATE / "rendered" / t["id"]
     tmp = out.with_name(out.name + ".tmp")

@@ -46,6 +46,8 @@ OUTPUTS = {
     "rofi.rasi": "templates/rofi.rasi",
     "launcher.rasi": "templates/launcher.rasi",
     "gtk.css": "templates/gtk.css",
+    "ghostty.conf": "templates/ghostty.conf",
+    "tmux.conf": "templates/tmux.conf",
 }
 
 ROLES = """bg bg_alt bg_dark surface0 surface1 surface2 overlay subtext fg
@@ -278,6 +280,8 @@ def activate(theme_id, reload=True):
         run("hyprctl", "reload", "config-only")
         run("hyprctl", "hyprpaper", "wallpaper", f",{wall}")
         run("pkill", "-USR2", "-x", "waybar")
+        run("pkill", "-USR2", "-x", "ghostty")  # Ghostty reloads its config on SIGUSR2
+        run("tmux", "source-file", "-q", str(STATE / "current/tmux.conf"))  # no-op without a server
         run("dunstctl", "reload")
         # alacritty only watches its own config; touching it re-reads the imported theme.
         (HOME / ".config/alacritty/alacritty.toml").touch()

@@ -116,7 +116,6 @@ waybar
 wl-clip-persist
 wl-clipboard
 wlogout
-wofi
 wtype
 xclip
 xdg-desktop-portal-hyprland

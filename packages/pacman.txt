@@ -74,6 +74,7 @@ nvidia-prime
 nvidia-settings
 nvm
 onnxruntime-cpu
+opencode
 openssh
 pacman-contrib
 pamixer

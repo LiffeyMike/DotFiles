@@ -1,5 +1,4 @@
 ## Environement variables
-export WAYLAND_DISPLAY=wayland-1
 export GDK_BACKEND=wayland
 export QT_QPA_PLATFORM=wayland
 export SDL_VIDEODRIVER=wayland

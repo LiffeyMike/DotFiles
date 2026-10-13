@@ -87,7 +87,7 @@ hl.bind(M1 .. " + Escape", hl.dsp.exec_cmd(d.LOCK)) -- was M2+L, which collided 
 hl.bind(M1 .. " + B", hl.dsp.exec_cmd(d.BROWSER))
 hl.bind(M2 .. " + B", hl.dsp.exec_cmd(d.GEFORCE_NOW))
 hl.bind(M1 .. " + P", hl.dsp.exec_cmd("spotify-launcher"))
-hl.bind(M1 .. " + S", hl.dsp.exec_cmd("steam"))
+hl.bind(M1 .. " + S", hl.dsp.exec_cmd("prime-run steam")) -- games inherit NVIDIA offload
 hl.bind(M1 .. " + D", hl.dsp.exec_cmd("discord"))
 hl.bind(M2 .. " + D", hl.dsp.exec_cmd("flatpak run com.heroicgameslauncher.hgl"))
 

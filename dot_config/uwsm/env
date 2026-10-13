@@ -4,9 +4,10 @@ export GDK_BACKEND=wayland
 export QT_QPA_PLATFORM=wayland
 export SDL_VIDEODRIVER=wayland
 export CLUTTER_BACKEND=wayland
-export LIBVA_DRIVER_NAME=nvidia
-export GBM_BACKEND=nvidia-drm
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
+# Hybrid graphics: the Intel iGPU drives every display and renders the desktop, so no
+# NVIDIA-wide overrides here. Games get the RTX via PRIME offload: Steam is launched
+# with prime-run and Heroic has a Flatpak env override, so everything they start inherits it.
+
 # NVIDIA shader disk cache: allow 10 GiB and never trim it (default cap is small, evicts across games)
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1

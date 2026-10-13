@@ -2,7 +2,6 @@
 
 require("land.defaults")          -- constants only (returned table)
 require("land.monitors")          -- monitor layout (dock externals matched by desc:)
--- require("land.nvidia")         -- uncomment on NVIDIA
 
 require("themes.base.theme")      -- border colors, blur, animations (palette from chezmoi)
 

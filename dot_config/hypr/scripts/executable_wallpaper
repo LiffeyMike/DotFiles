@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Switch every monitor to a random other image from ~/Pictures/Wallpapers (waybar button).
+# Not persistent: hyprpaper.conf still decides the wallpaper at login.
+dir="$HOME/Pictures/Wallpapers"
+current=$(hyprctl hyprpaper listactive | head -n1 | cut -d' ' -f2-)
+
+next=$(find "$dir" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
+	! -path "$current" | shuf -n 1)
+if [ -z "$next" ]; then
+	notify-send -a wallpaper "No other wallpapers" "Add images to $dir"
+	exit 0
+fi
+
+hyprctl hyprpaper wallpaper ",$next" >/dev/null

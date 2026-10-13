@@ -49,6 +49,7 @@ hyprpaper
 hyprpicker
 hyprpolkitagent
 hyprpwcenter
+intel-media-driver
 intel-ucode
 jdk21-openjdk
 jq
@@ -68,6 +69,7 @@ man-pages
 neovim
 networkmanager
 nvidia-open-dkms
+nvidia-prime
 nvidia-settings
 nvm
 onnxruntime-cpu
@@ -104,6 +106,8 @@ uv
 uwsm
 vim
 vivaldi
+vulkan-intel
+vulkan-mesa-implicit-layers
 waybar
 wl-clip-persist
 wl-clipboard

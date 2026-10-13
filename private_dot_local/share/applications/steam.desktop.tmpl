@@ -1,0 +1,7 @@
+{{- /* The system steam.desktop with every Exec wrapped in prime-run, so Steam started
+       from the launcher puts its games on the NVIDIA GPU. Rebuilt from the installed
+       file on each apply; renders empty (no file) where Steam isn't installed. */ -}}
+{{- $sys := "/usr/share/applications/steam.desktop" -}}
+{{- if stat $sys -}}
+{{ include $sys | replace "Exec=/usr/bin/steam" "Exec=prime-run /usr/bin/steam" }}
+{{- end -}}

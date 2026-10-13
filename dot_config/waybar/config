@@ -23,8 +23,8 @@
 		"tooltip": false,
 		"format": " {}%",
 		"interval":1,
-    "on-scroll-up": "light -A 5",
-		"on-scroll-down": "light -U 5"
+    "on-scroll-up": "~/.config/hypr/scripts/buttons/bright+",
+		"on-scroll-down": "~/.config/hypr/scripts/buttons/bright-"
 	},
   "battery": {
     "states": {
@@ -80,7 +80,7 @@
   },
   "custom/power":{
       "format": " ",
-      "on-click": "bash ~/.config/wofi/leave/leave.sh",
+      "on-click": "wlogout",
   },
   "custom/updates":{
       "format": "{} Update(s)",
@@ -91,6 +91,6 @@
   },
   "custom/wallpaper":{
       "format":" ",
-      "on-click": "bash ~/.config/system_scripts/pkill_bc"
+      "on-click": "~/.config/hypr/scripts/wallpaper"
   }
 }

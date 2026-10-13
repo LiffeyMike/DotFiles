@@ -20,9 +20,10 @@ hl.bind(M1 .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 -- Core
 hl.bind(M1 .. " + Q", hl.dsp.window.close())
+-- hyprctl dispatch takes a Lua expression under the Lua config.
 hl.bind(
 	M2 .. " + M",
-	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit")
+	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
 hl.bind(M1 .. " + E", hl.dsp.exec_cmd("thunar"))
 hl.bind(M1 .. " + R", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/dock-recover --force")) -- un-wedge monitors after a dock drop
@@ -35,7 +36,6 @@ hl.bind(M1 .. " + K", hl.dsp.focus({ direction = "u" }))
 hl.bind(M1 .. " + J", hl.dsp.focus({ direction = "d" }))
 
 -- Window organisation
--- NOTE: M2+H is reassigned below to Heroic launcher (matches original load order).
 hl.bind(M2 .. " + H", hl.dsp.window.move({ direction = "l" }))
 hl.bind(M2 .. " + L", hl.dsp.window.move({ direction = "r" }))
 hl.bind(M2 .. " + J", hl.dsp.window.move({ direction = "d" }))
@@ -53,15 +53,14 @@ hl.bind(M1 .. " + G", hl.dsp.group.toggle())
 hl.bind(M1 .. " + Tab", hl.dsp.group.next())
 hl.bind(M1 .. " + F", hl.dsp.window.fullscreen())
 hl.bind(M2 .. " + F", hl.dsp.window.float({ action = "toggle" }))
--- centerwindow has no hl.dsp.* wrapper yet; fall back to hyprctl.
-hl.bind(M1 .. " + C", hl.dsp.exec_cmd("hyprctl dispatch centerwindow"))
+hl.bind(M1 .. " + C", hl.dsp.window.center())
 
 hl.bind(M1 .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(M1 .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Volume
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(d.VOLRED), { repeating = true })
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(d.VOLINC), { repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(d.VOLRED), { repeating = true, locked = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(d.VOLINC), { repeating = true, locked = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 
 -- Media
@@ -70,8 +69,8 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 
 -- Brightness
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(d.BRIGHTINC), { repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(d.BRIGHTRED), { repeating = true })
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(d.BRIGHTINC), { repeating = true, locked = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(d.BRIGHTRED), { repeating = true, locked = true })
 hl.bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd(d.KBDBRIGHTINC))
 hl.bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd(d.KBDBRIGHTRED))
 
@@ -82,7 +81,7 @@ hl.bind(M1 .. " + Return", hl.dsp.exec_cmd(d.TERM))
 hl.bind(M2 .. " + S", hl.dsp.exec_cmd(d.SCREENSHOT))
 hl.bind(M1 .. " + X", hl.dsp.exec_cmd("wlogout"), { locked = true })
 hl.bind("SUPER + V", hl.dsp.exec_cmd("cliphist list | " .. d.DRUN .. " | cliphist decode | wl-copy"))
-hl.bind(M2 .. " + L", hl.dsp.exec_cmd(d.LOCK))
+hl.bind(M1 .. " + Escape", hl.dsp.exec_cmd(d.LOCK)) -- was M2+L, which collided with move-right
 
 -- Applications
 hl.bind(M1 .. " + B", hl.dsp.exec_cmd(d.BROWSER))

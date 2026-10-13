@@ -23,50 +23,6 @@ window#waybar.hidden {
   color: transparent;
   background: transparent;
 }
-#tags {
-  margin-top: 6px;
-  margin-left: 12px;
-  font-size: 4px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  background: #161320;
-  transition: none;
-}
-
-#tags button {
-  transition: none;
-  color: #b5e8e0;
-  background: transparent;
-  font-size: 16px;
-  border-radius: 2px;
-}
-
-#tags button.occupied {
-  transition: none;
-  color: #f28fad;
-  background: transparent;
-  font-size: 4px;
-}
-
-#tags button.focused {
-  color: #abe9b3;
-  border-top: 2px solid #abe9b3;
-  border-bottom: 2px solid #abe9b3;
-}
-
-#tags button:hover {
-  transition: none;
-  box-shadow: inherit;
-  text-shadow: inherit;
-  color: #fae3b0;
-  border-color: #e8a2af;
-  color: #e8a2af;
-}
-
-#tags button.focused:hover {
-  color: #e8a2af;
-}
-
 #network {
   margin-top: 6px;
   margin-left: 8px;
@@ -75,8 +31,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #bd93f9;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.mauve }};
 }
 
 #pulseaudio {
@@ -87,8 +43,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #1a1826;
-  background: #fae3b0;
+  color: #{{ .palette.mantle }};
+  background: #{{ .palette.yellow }};
 }
 
 #battery {
@@ -99,19 +55,19 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #b5e8e0;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.teal }};
 }
 
 #battery.charging,
 #battery.plugged {
-  color: #161320;
-  background-color: #b5e8e0;
+  color: #{{ .palette.crust }};
+  background-color: #{{ .palette.teal }};
 }
 
 #battery.critical:not(.charging) {
-  background-color: #b5e8e0;
-  color: #161320;
+  background-color: #{{ .palette.teal }};
+  color: #{{ .palette.crust }};
   animation-name: blink;
   animation-duration: 0.5s;
   animation-timing-function: linear;
@@ -121,8 +77,8 @@ window#waybar.hidden {
 
 @keyframes blink {
   to {
-    background-color: #bf616a;
-    color: #b5e8e0;
+    background-color: #{{ .palette.red }};
+    color: #{{ .palette.teal }};
   }
 }
 
@@ -134,8 +90,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #f8bd96;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.peach }};
 }
 #clock {
   margin-top: 6px;
@@ -145,9 +101,9 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #abe9b3;
-  /*background: #1A1826;*/
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.green }};
+  /*background: #{{ .palette.mantle }};*/
 }
 
 #memory {
@@ -158,8 +114,8 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #ddb6f2;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.mauve }};
 }
 #cpu {
   margin-top: 6px;
@@ -169,8 +125,8 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #96cdfb;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.blue }};
 }
 
 #tray {
@@ -181,8 +137,8 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: #b5e8e0;
-  background: #161320;
+  color: #{{ .palette.teal }};
+  background: #{{ .palette.crust }};
 }
 
 #custom-launcher {
@@ -193,8 +149,8 @@ window#waybar.hidden {
   padding-right: 5px;
   border-radius: 10px;
   transition: none;
-  color: #89dceb;
-  background: #161320;
+  color: #{{ .palette.sky }};
+  background: #{{ .palette.crust }};
 }
 
 #custom-power {
@@ -207,8 +163,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #f28fad;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.red }};
 }
 
 #custom-wallpaper {
@@ -219,8 +175,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #c9cbff;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.lavender }};
 }
 
 #custom-updates {
@@ -231,8 +187,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #e8a2af;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.maroon }};
 }
 
 #custom-media {
@@ -243,8 +199,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #f2cdcd;
+  color: #{{ .palette.crust }};
+  background: #{{ .palette.flamingo }};
 }
 
 #workspaces button {
@@ -255,6 +211,6 @@ window#waybar.hidden {
 }
 
 #workspaces button.active {
-  background-color: #9ce3af;
+  background-color: #{{ .palette.green }};
   opacity: 0.5;
 }

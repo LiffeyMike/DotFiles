@@ -19,4 +19,4 @@ term = "xterm-256color"
 SHELL = "zsh"
 
 [general]
-import = ["~/.config/alacritty/themes/hyper.toml"]
+import = ["~/.config/alacritty/themes/catppuccin-mocha.toml"]

@@ -4,10 +4,12 @@
 local MIDDLE = "desc:Microstep MSI MAG 27C6X CE0M035805785"
 local RIGHT = "desc:Dell Inc. DELL U2419H 8M8RT83"
 
--- Laptop panel, far left. It supports 144Hz, so use it.
+local power = require("land.power")
+
+-- Laptop panel, far left. 144Hz on AC, 60Hz on battery (see land/power.lua).
 hl.monitor({
 	output = "eDP-1",
-	mode = "1920x1080@144",
+	mode = power.on_battery and "1920x1080@60" or "1920x1080@144",
 	position = "0x0",
 	scale = 1,
 })

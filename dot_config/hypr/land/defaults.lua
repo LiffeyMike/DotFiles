@@ -9,7 +9,8 @@ M.SCRIPTS = M.HERE .. "/scripts"
 M.DRUN = "wofi --show drun"
 M.SCREENSHOT = M.SCRIPTS .. "/screenshot"
 M.LOCK = M.SCRIPTS .. "/lock"
-M.TERM = "alacritty --class=TERM -e sh -c 'tmux attach -t Main || tmux new-session -s Main; exec $SHELL'"
+M.TMUX = "sh -c 'tmux attach -t Main || tmux new-session -s Main; exec $SHELL'"
+M.TERM = "alacritty --class=TERM -e " .. M.TMUX
 M.PI_5_SSH = "alacritty -e ssh pi"
 M.BROWSER = "vivaldi --enable-features=UseOzonePlatform --ozone-platform=wayland --class=BROWSER"
 M.GEFORCE_NOW =
@@ -23,8 +24,6 @@ M.KBDBRIGHTINC = M.SCRIPTS .. "/buttons/kbdbacklight+"
 M.KBDBRIGHTRED = M.SCRIPTS .. "/buttons/kbdbacklight-"
 
 M.NATURAL_SCROLL = true
-M.WORKSPACE_SWIPE = true
-M.WORKSPACE_SWIPE_FINGERS = 3
 M.XWAYLAND_ZERO_SCALING = true
 M.DISABLE_HYPRLAND_LOGO = true
 M.ANIMATE_RESIZE = true

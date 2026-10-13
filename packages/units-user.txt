@@ -1,0 +1,5 @@
+cliphist.service
+hypridle.service
+hyprpaper.service
+hyprpolkitagent.service
+waybar.service

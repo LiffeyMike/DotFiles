@@ -1,36 +1,24 @@
 -- land/general.conf -> Lua. Autostart, input, gestures, misc.
 
 local d = require("land.defaults")
-local home = os.getenv("HOME")
+
+-- Long-running daemons (waybar, hyprpaper, hypridle, polkit agent, cliphist) are
+-- systemd user units bound to graphical-session.target; see packages/units-user.txt.
+-- Everything here is launched through uwsm so it lands in its own systemd scope.
+local function app(cmd)
+	hl.exec_cmd("uwsm app -- " .. cmd)
+end
 
 hl.on("hyprland.start", function()
-	hl.exec_cmd(d.SCRIPTS .. "/powercheck")
-	hl.exec_cmd(d.SCRIPTS .. "/portal.sh")
-	hl.exec_cmd("hyprpolkitagent")
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
-	hl.exec_cmd("hyprpaper")
-	hl.exec_cmd("waybar -c " .. home .. "/.config/waybar/river/config -s " .. home .. "/.config/waybar/river/style.css")
-	hl.exec_cmd("wl-paste --type text  --watch cliphist store")
-	hl.exec_cmd("wl-paste --type image --watch cliphist store")
-	hl.exec_cmd("wl-clip-persist --clipboard regular")
+	app("wl-clip-persist --clipboard regular")
+	app(d.SCRIPTS .. "/power-watch")
 
-	hl.exec_cmd("nvidia-settings")
-	hl.exec_cmd("vivaldi --class=MAIN_BROWSER --enable-features=UseOzonePlatform --ozone-platform=wayland")
-	hl.exec_cmd("alacritty --class=MAIN_TERM -e sh -c 'tmux attach -t Main || tmux new-session -s Main; exec $SHELL'")
-	hl.exec_cmd("blueman-manager")
-	hl.exec_cmd("sh -c 'sleep 10; exec pavucontrol'") -- delayed so the headset finishes connecting first
-
-	hl.exec_cmd(
-		"pkill swayidle; swayidle -w"
-			.. " timeout 300 '"
-			.. d.LOCK
-			.. "'"
-			.. " timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'"
-			.. " before-sleep '"
-			.. d.LOCK
-			.. "'"
-	)
+	app("nvidia-settings")
+	app("vivaldi --class=MAIN_BROWSER --enable-features=UseOzonePlatform --ozone-platform=wayland")
+	app("alacritty --class=MAIN_TERM -e " .. d.TMUX)
+	app("blueman-manager")
+	app("sh -c 'sleep 10; exec pavucontrol'") -- delayed so the headset finishes connecting first
 end)
 
 hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })

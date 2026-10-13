@@ -1,0 +1,58 @@
+# Lock screen. Colours come from .chezmoidata/palette.toml (Catppuccin Mocha).
+{{- $p := .palette }}
+
+general {
+    hide_cursor = true
+    ignore_empty_input = true
+}
+
+background {
+    monitor =
+    path = screenshot
+    blur_passes = 3
+    blur_size = 8
+    brightness = 0.7
+}
+
+input-field {
+    monitor =
+    size = 300, 55
+    outline_thickness = 3
+    dots_size = 0.25
+    dots_spacing = 0.3
+    rounding = 15
+    outer_color = rgb({{ $p.mauve }})
+    inner_color = rgb({{ $p.base }})
+    font_color = rgb({{ $p.text }})
+    check_color = rgb({{ $p.yellow }})
+    fail_color = rgb({{ $p.red }})
+    capslock_color = rgb({{ $p.peach }})
+    fade_on_empty = false
+    placeholder_text = <i>Password…</i>
+    fail_text = <i>$FAIL ($ATTEMPTS)</i>
+    position = 0, -80
+    halign = center
+    valign = center
+}
+
+label {
+    monitor =
+    text = $TIME
+    color = rgb({{ $p.text }})
+    font_size = 90
+    font_family = JetBrainsMono Nerd Font
+    position = 0, 120
+    halign = center
+    valign = center
+}
+
+label {
+    monitor =
+    text = cmd[update:60000] date +"%A, %d %B"
+    color = rgb({{ $p.subtext1 }})
+    font_size = 20
+    font_family = JetBrainsMono Nerd Font
+    position = 0, 30
+    halign = center
+    valign = center
+}

@@ -1,0 +1,7 @@
+-- Generated from .chezmoidata/palette.toml (Catppuccin Mocha). Edit that, not this.
+-- Values are 0xAARRGGBB strings, ready for Hyprland colour options.
+return {
+{{- range $name, $hex := .palette }}
+	{{ $name }} = "0xff{{ $hex }}",
+{{- end }}
+}

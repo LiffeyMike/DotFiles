@@ -1,0 +1,36 @@
+/* Layout "pills": transparent bar, every module a coloured floating pill. */
+window#waybar {
+  background: transparent;
+}
+
+#workspaces,
+#custom-launcher, #cpu, #memory, #custom-media, #tray,
+#custom-updates, #custom-theme, #backlight, #pulseaudio, #clock, #battery, #custom-power {
+  margin-left: 8px;
+  padding: 2px 10px;
+  border-radius: {{ look.ui_rounding }}px;
+  color: #{{ p.bg_dark }};
+}
+
+#custom-power { margin-right: 8px; }
+
+#workspaces { background: #{{ p.bg_dark }}; padding: 0 4px; }
+#workspaces button { color: #{{ p.subtext }}; padding: 0 6px; border-radius: {{ look.ui_rounding }}px; }
+#workspaces button.active { color: #{{ p.bg_dark }}; background: #{{ p.accent }}; }
+#workspaces button:hover { background: #{{ p.surface1 }}; }
+
+#custom-launcher { background: #{{ p.bg_dark }}; color: #{{ p.cyan }}; font-size: 20px; }
+#tray { background: #{{ p.bg_dark }}; color: #{{ p.fg }}; }
+#cpu { background: #{{ p.blue }}; }
+#memory { background: #{{ p.purple }}; }
+#custom-media { background: #{{ p.pink }}; }
+#custom-updates { background: #{{ p.pink }}; }
+#custom-theme { background: #{{ p.accent2 }}; }
+#backlight { background: #{{ p.orange }}; }
+#pulseaudio { background: #{{ p.yellow }}; }
+#clock { background: #{{ p.green }}; }
+#battery { background: #{{ p.teal }}; }
+#battery.critical:not(.charging) {
+  animation: blink 0.5s linear infinite alternate;
+}
+#custom-power { background: #{{ p.red }}; }

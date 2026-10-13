@@ -1,0 +1,54 @@
+name = "Gruvbox Dark"
+
+[look]
+rounding = 0
+ui_rounding = 0
+gaps_in = 6
+gaps_out = 12
+border_size = 3
+border = ["orange", "yellow"]
+border_angle = 90
+blur = false
+shadow = false
+animations = "smooth"
+term_opacity = 1.0
+
+[palette]
+bg = "282828"
+bg_alt = "1d2021"
+bg_dark = "141617"
+surface0 = "3c3836"
+surface1 = "504945"
+surface2 = "665c54"
+overlay = "928374"
+subtext = "d5c4a1"
+fg = "ebdbb2"
+red = "fb4934"
+orange = "fe8019"
+yellow = "fabd2f"
+green = "b8bb26"
+teal = "689d6a"
+cyan = "8ec07c"
+blue = "83a598"
+purple = "d3869b"
+pink = "d3869b"
+accent = "fe8019"
+accent2 = "fabd2f"
+
+[terminal]
+black = "282828"
+red = "cc241d"
+green = "98971a"
+yellow = "d79921"
+blue = "458588"
+magenta = "b16286"
+cyan = "689d6a"
+white = "a89984"
+bright_black = "928374"
+bright_red = "fb4934"
+bright_green = "b8bb26"
+bright_yellow = "fabd2f"
+bright_blue = "83a598"
+bright_magenta = "d3869b"
+bright_cyan = "8ec07c"
+bright_white = "ebdbb2"

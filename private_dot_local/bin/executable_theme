@@ -1,0 +1,338 @@
+#!/usr/bin/env python3
+"""Live theme switcher.
+
+Themes live in ~/.config/theme/themes/<id>.toml, merged over defaults.toml. `theme set <id>`
+renders templates/ (Jinja2) into ~/.local/state/theme/rendered/<id>/, points the `current`
+symlink at it, and reloads every app. App configs only ever reference current/.
+
+  theme menu          rofi picker with previews
+  theme set <id>      switch to a theme
+  theme refresh       re-render the active theme (after editing theme files)
+  theme list          list theme ids
+  theme current       print the active theme id
+  theme snapshot      screenshot the focused monitor as the active theme's preview
+"""
+
+import hashlib
+import json
+import os
+import shutil
+import struct
+import subprocess
+import sys
+import tomllib
+import zlib
+from pathlib import Path
+
+HOME = Path.home()
+SRC = Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config")) / "theme"
+STATE = Path(os.environ.get("XDG_STATE_HOME", HOME / ".local/state")) / "theme"
+CACHE = Path(os.environ.get("XDG_CACHE_HOME", HOME / ".cache")) / "theme"
+WALLPAPERS = HOME / "Pictures/Wallpapers"
+DEFAULT_THEME = "mocha"
+
+# Rendered file -> template. Layouts are pulled in by the templates themselves.
+OUTPUTS = {
+    "hypr.lua": "templates/hypr.lua",
+    "waybar.jsonc": "templates/waybar.jsonc",
+    "waybar.css": "templates/waybar.css",
+    "wofi.css": "templates/wofi.css",
+    "dunst.conf": "templates/dunst.conf",
+    "alacritty.toml": "templates/alacritty.toml",
+    "hyprlock.conf": "templates/hyprlock.conf",
+    "hyprpaper.conf": "templates/hyprpaper.conf",
+    "rofi.rasi": "templates/rofi.rasi",
+}
+
+ROLES = """bg bg_alt bg_dark surface0 surface1 surface2 overlay subtext fg
+    red orange yellow green teal cyan blue purple pink accent accent2""".split()
+TERM_COLORS = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+
+
+def die(msg):
+    print(f"theme: {msg}", file=sys.stderr)
+    notify("Theme error", msg, urgency="critical")
+    sys.exit(1)
+
+
+def run(*cmd):
+    """Run a reload command; a missing tool or a dead daemon must not stop the switch."""
+    try:
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+
+def notify(title, body, urgency="low", timeout_ms=None):
+    timeout = ["-t", str(timeout_ms)] if timeout_ms else []
+    run("notify-send", "-a", "theme", "-u", urgency, *timeout, title, body)
+
+
+# --- theme data ---------------------------------------------------------------------------
+
+
+def theme_ids():
+    return sorted(p.stem for p in (SRC / "themes").glob("*.toml") if p.stem != "defaults")
+
+
+def merge(base, over):
+    out = dict(base)
+    for k, v in over.items():
+        out[k] = merge(out[k], v) if isinstance(v, dict) and isinstance(out.get(k), dict) else v
+    return out
+
+
+def load(theme_id):
+    path = SRC / "themes" / f"{theme_id}.toml"
+    if not path.is_file():
+        die(f"no theme '{theme_id}' (have: {', '.join(theme_ids())})")
+    with open(SRC / "themes/defaults.toml", "rb") as f:
+        defaults = tomllib.load(f)
+    with open(path, "rb") as f:
+        t = merge(defaults, tomllib.load(f))
+
+    p = t["palette"]
+    missing = [r for r in ROLES if r not in p]
+    if missing:
+        die(f"{theme_id}: palette is missing {', '.join(missing)}")
+    for role in [*t["look"]["border"], t["look"]["inactive_border"]]:
+        if role not in p:
+            die(f"{theme_id}: look refers to unknown palette role '{role}'")
+
+    derived = {
+        "black": p["surface1"], "red": p["red"], "green": p["green"], "yellow": p["yellow"],
+        "blue": p["blue"], "magenta": p["purple"], "cyan": p["teal"], "white": p["subtext"],
+    }
+    term = {"cursor": p["fg"]}
+    for c in TERM_COLORS:
+        term[c] = derived[c]
+        term["bright_" + c] = derived[c]
+    term["bright_black"], term["bright_white"] = p["surface2"], p["fg"]
+    term.update(t.get("terminal", {}))
+    for c in TERM_COLORS:  # an overridden normal colour also moves its bright twin, unless set
+        if c in t.get("terminal", {}) and "bright_" + c not in t["terminal"] and c not in ("black", "white"):
+            term["bright_" + c] = term[c]
+    t["term"] = term
+    t["id"] = theme_id
+    return t
+
+
+def digest(t):
+    return hashlib.sha1(json.dumps(t, sort_keys=True).encode()).hexdigest()[:10]
+
+
+# --- images (no PIL/ImageMagick: plain RGB PNGs written by hand) -----------------------------
+
+
+def rgb(hexstr):
+    return bytes.fromhex(hexstr)
+
+
+def write_png(path, w, h, raw):
+    def chunk(kind, data):
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
+
+    rows = b"".join(b"\x00" + raw[y * w * 3:(y + 1) * w * 3] for y in range(h))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_bytes(b"\x89PNG\r\n\x1a\n"
+                    + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+                    + chunk(b"IDAT", zlib.compress(rows, 6)) + chunk(b"IEND", b""))
+    tmp.replace(path)
+
+
+class Canvas:
+    def __init__(self, w, h, fill):
+        self.w, self.h = w, h
+        self.px = bytearray(rgb(fill) * (w * h))
+
+    def rect(self, x, y, w, h, color, border=None, bw=0):
+        c = rgb(color)
+        for row in range(max(y, 0), min(y + h, self.h)):
+            a = (row * self.w + x) * 3
+            self.px[a:a + w * 3] = c * w
+        if border and bw:
+            self.rect(x, y, w, bw, border)
+            self.rect(x, y + h - bw, w, bw, border)
+            self.rect(x, y, bw, h, border)
+            self.rect(x + w - bw, y, bw, h, border)
+
+
+def gradient_wallpaper(t):
+    path = CACHE / f"wall-{t['id']}-{digest(t['palette'])}.png"
+    if not path.exists():
+        w, h = 1920, 1080
+        top, bottom = rgb(t["palette"]["bg_alt"]), rgb(t["palette"]["bg_dark"])
+        raw = bytearray()
+        for y in range(h):
+            f = y / (h - 1)
+            raw += bytes(round(a + (b - a) * f) for a, b in zip(top, bottom)) * w
+        write_png(path, w, h, raw)
+    return path
+
+
+def preview(t):
+    """Real screenshot from `theme snapshot` if there is one, else a drawn mock-up."""
+    shot = STATE / "previews" / f"{t['id']}.png"
+    if shot.exists():
+        return shot
+    path = CACHE / f"preview-{t['id']}-{digest(t)}.png"
+    if path.exists():
+        return path
+    p, look = t["palette"], t["look"]
+    c = Canvas(480, 300, p["bg_dark"])
+    bw = max(2, look["border_size"])
+    # bar
+    if t["layout"]["waybar"] == "pills":
+        x = 12
+        for role in ["blue", "purple", "accent", "orange", "yellow", "green", "teal", "red"]:
+            c.rect(x, 10, 46, 16, p[role])
+            x += 58
+    else:
+        c.rect(0, 0, 480, 30, p["bg"])
+        c.rect(0, 30, 480, 2, p["surface1"])
+        c.rect(12, 10, 30, 10, p["accent"])
+        c.rect(222, 10, 36, 10, p["fg"])
+        for i, role in enumerate(["blue", "purple", "yellow", "green", "red"]):
+            c.rect(330 + i * 28, 10, 18, 10, p[role])
+    # windows: focused (accent border) and unfocused
+    gap = 8 + look["gaps_out"] // 2
+    top, height = 40, 196
+    c.rect(gap, top, 230 - gap, height, p["bg"], p[look["border"][0]], bw)
+    c.rect(242, top, 238 - gap, height, p["bg_alt"], p[look["inactive_border"]], bw)
+    for i, (role, width) in enumerate([("accent", 120), ("fg", 160), ("subtext", 100), ("green", 140), ("fg", 90)]):
+        c.rect(gap + 16, top + 18 + i * 22, width, 8, p[role])
+    for i, role in enumerate(["surface1", "surface2", "overlay"]):
+        c.rect(258, top + 18 + i * 34, 180 - gap, 22, p[role])
+    # palette swatches
+    roles = ["red", "orange", "yellow", "green", "teal", "cyan", "blue", "purple", "pink"]
+    for i, role in enumerate(roles):
+        c.rect(12 + i * 51, 252, 45, 36, p[role])
+    write_png(path, c.w, c.h, c.px)
+    return path
+
+
+# --- render + switch ------------------------------------------------------------------------
+
+
+def render(t):
+    try:
+        import jinja2
+    except ImportError:
+        die("python-jinja is not installed")
+
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(SRC),
+        undefined=jinja2.StrictUndefined,
+        keep_trailing_newline=True,
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    env.filters["lua"] = lambda v: json.dumps(v)  # bool/number/string literals match Lua's
+    env.filters["hypr"] = lambda hexstr, alpha=0xFF: f"0x{alpha:02x}{hexstr}"
+
+    wall = t["wallpaper"]
+    if wall:
+        wall_path = WALLPAPERS / wall
+        if not wall_path.is_file():
+            die(f"{t['id']}: wallpaper {wall_path} not found")
+    else:
+        wall_path = gradient_wallpaper(t)
+
+    ctx = {"theme": t, "p": t["palette"], "look": t["look"], "layout": t["layout"],
+           "term": t["term"], "wallpaper_path": str(wall_path)}
+
+    out = STATE / "rendered" / t["id"]
+    tmp = out.with_name(out.name + ".tmp")
+    shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(parents=True)
+    for name, template in OUTPUTS.items():
+        try:
+            text = env.get_template(template).render(ctx)
+        except jinja2.TemplateError as e:
+            shutil.rmtree(tmp, ignore_errors=True)
+            die(f"{t['id']}: {template}: {e}")
+        (tmp / name).write_text(text)
+    shutil.rmtree(out, ignore_errors=True)
+    tmp.rename(out)
+    return out, wall_path
+
+
+def activate(theme_id, reload=True):
+    t = load(theme_id)
+    out, wall = render(t)
+
+    link = STATE / "current"
+    tmp_link = STATE / "current.tmp"
+    tmp_link.unlink(missing_ok=True)
+    tmp_link.symlink_to(out.relative_to(STATE))
+    tmp_link.replace(link)  # atomic: apps never see a half-switched theme
+    (STATE / "active").write_text(theme_id + "\n")
+
+    if reload and os.environ.get("HYPRLAND_INSTANCE_SIGNATURE"):
+        run("hyprctl", "reload", "config-only")
+        run("hyprctl", "hyprpaper", "wallpaper", f",{wall}")
+        run("pkill", "-USR2", "-x", "waybar")
+        run("dunstctl", "reload")
+        # alacritty only watches its own config; touching it re-reads the imported theme.
+        (HOME / ".config/alacritty/alacritty.toml").touch()
+        run("gsettings", "set", "org.gnome.desktop.interface", "color-scheme", t["look"]["color_scheme"])
+        notify("Theme", t["name"], timeout_ms=2000)
+    return t
+
+
+def active():
+    try:
+        theme_id = (STATE / "active").read_text().strip()
+    except FileNotFoundError:
+        return DEFAULT_THEME
+    return theme_id if theme_id in theme_ids() else DEFAULT_THEME
+
+
+def menu():
+    ids = theme_ids()
+    themes = [load(i) for i in ids]
+    current = active()
+    entries = "".join(f"{t['name']}\0icon\x1f{preview(t)}\n" for t in themes)
+    try:
+        res = subprocess.run(
+            ["rofi", "-dmenu", "-i", "-show-icons", "-p", "Theme", "-format", "i",
+             "-selected-row", str(ids.index(current) if current in ids else 0),
+             "-theme", str(STATE / "current/rofi.rasi")],
+            input=entries, capture_output=True, text=True)
+    except FileNotFoundError:
+        die("rofi is not installed")
+    if res.returncode == 0 and res.stdout.strip():
+        activate(ids[int(res.stdout.strip())])
+
+
+def snapshot():
+    out = subprocess.run(["hyprctl", "-j", "monitors"], capture_output=True, text=True).stdout
+    focused = next(m["name"] for m in json.loads(out) if m["focused"])
+    path = STATE / "previews" / f"{active()}.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["grim", "-o", focused, "-s", "0.25", str(path)], check=True)
+    notify("Theme preview saved", str(path))
+
+
+def main(argv):
+    cmd = argv[0] if argv else "menu"
+    if cmd == "menu":
+        menu()
+    elif cmd == "set" and len(argv) == 2:
+        activate(argv[1])
+    elif cmd == "refresh":
+        activate(active(), reload="--no-reload" not in argv)
+    elif cmd == "list":
+        print("\n".join(theme_ids()))
+    elif cmd == "current":
+        print(active())
+    elif cmd == "snapshot":
+        snapshot()
+    else:
+        print(__doc__.strip(), file=sys.stderr)
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

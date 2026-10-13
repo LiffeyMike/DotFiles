@@ -1,0 +1,81 @@
+// Settings shared by every waybar layout. Included inside a layout's top-level object.
+
+// The bar only appears on the laptop panel; external monitors are left bar-free.
+"output": "eDP-1",
+
+"hyprland/workspaces": {
+  "disable-scroll": true,
+  "all-outputs": true,
+  "warp-on-scroll": false
+},
+"clock": {
+  "format": " {:%H:%M  %a %d %b}",
+  "tooltip-format": "<tt>{calendar}</tt>"
+},
+"cpu": {
+  "interval": 15,
+  "format": "  {}%",
+  "max-length": 10
+},
+"memory": {
+  "interval": 30,
+  "format": " {}%",
+  "max-length": 10
+},
+"backlight": {
+  "tooltip": false,
+  "format": " {}%",
+  "on-scroll-up": "~/.config/hypr/scripts/buttons/bright+",
+  "on-scroll-down": "~/.config/hypr/scripts/buttons/bright-"
+},
+"pulseaudio": {
+  "tooltip": false,
+  "scroll-step": 5,
+  "format": "{icon} {volume}%",
+  "format-muted": " muted",
+  "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+  "format-icons": { "default": ["", "", ""] }
+},
+"battery": {
+  "states": { "warning": 30, "critical": 15 },
+  "format": "{icon}  {capacity}%",
+  "format-charging": " {capacity}%",
+  "format-plugged": " {capacity}%",
+  "format-alt": "{time} {icon}",
+  "format-icons": ["", "", "", "", ""]
+},
+"tray": {
+  "icon-size": 18,
+  "spacing": 10
+},
+"custom/media": {
+  "interval": 30,
+  "format": "{icon} {}",
+  "return-type": "json",
+  "max-length": 20,
+  "format-icons": { "spotify": " ", "default": " " },
+  "escape": true,
+  "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+  "on-click": "playerctl play-pause"
+},
+"custom/launcher": {
+  "format": " ",
+  "on-click": "wofi --show drun",
+  "on-click-right": "pkill wofi"
+},
+"custom/theme": {
+  "format": " ",
+  "tooltip-format": "Change theme",
+  "on-click": "~/.local/bin/theme menu"
+},
+"custom/updates": {
+  "format": "{} Update(s)",
+  "exec": "checkupdates | wc -l",
+  "exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
+  "interval": 3600,
+  "on-click": "alacritty -e sudo pacman -Syu"
+},
+"custom/power": {
+  "format": " ",
+  "on-click": "wlogout"
+}

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Re-render the active theme (default: mocha) whenever the theme sources or the `theme` script
+# change, and on first install. The rendered files live in ~/.local/state/theme, outside chezmoi.
+# {{ output "sh" "-c" (printf "cd '%s' && find dot_config/theme private_dot_local/bin/executable_theme -type f | sort | xargs sha256sum" .chezmoi.sourceDir) | sha256sum }}
+set -eu
+exec "$HOME/.local/bin/theme" refresh

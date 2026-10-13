@@ -1,0 +1,38 @@
+# Every theme setting and its default. A theme file in this folder only lists what it changes;
+# `theme` deep-merges it over this file. Colours are bare hex (no '#').
+name = "Unnamed"
+# Image in ~/Pictures/Wallpapers. Empty: a gradient is generated from the palette.
+wallpaper = ""
+
+[look]
+font = "JetBrainsMono Nerd Font"
+font_size = 12          # notifications, menus
+bar_font_size = 14
+term_font_size = 14
+term_opacity = 0.9
+gaps_in = 5
+gaps_out = 12
+border_size = 2
+border = ["accent", "accent2"]   # palette roles for the active-border gradient
+border_angle = 45
+inactive_border = "surface1"
+rounding = 8            # windows
+ui_rounding = 10        # bar, menus, notifications, lock screen
+blur = true
+shadow = true
+animations = "smooth"   # smooth | bouncy | none
+tiling = "dwindle"      # dwindle | master
+color_scheme = "prefer-dark"     # GTK: prefer-dark | prefer-light | default
+
+[layout]
+waybar = "pills"        # layouts/waybar/<name>.jsonc + .css
+
+# Required palette roles (every theme defines all of them):
+#   bg bg_alt bg_dark surface0 surface1 surface2 overlay subtext fg
+#   red orange yellow green teal cyan blue purple pink accent accent2
+[palette]
+
+# Optional terminal overrides. Unset keys are derived from the palette:
+#   black=surface1 red green yellow blue magenta=purple cyan=teal white=subtext
+#   bright_black=surface2 bright_white=fg cursor=fg
+[terminal]

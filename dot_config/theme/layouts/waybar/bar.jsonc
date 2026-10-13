@@ -1,0 +1,9 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/media"],
+  "modules-center": ["clock"],
+  "modules-right": ["tray", "cpu", "memory", "backlight", "pulseaudio", "battery", "custom/theme", "custom/power"],
+  {% include "layouts/waybar/_shared.jsonc" %}
+}

@@ -81,8 +81,10 @@ pgcli
 pipewire-alsa
 pipewire-pulse
 postgresql
+python-jinja
 qjackctl
 ripgrep
+rofi
 rustup
 sc3-plugins
 scx-scheds
@@ -97,6 +99,7 @@ supercollider
 tex-gyre-fonts
 thunar
 tmux
+ttf-jetbrains-mono-nerd
 ttf-liberation-mono-nerd
 ttf-noto-nerd
 umu-launcher

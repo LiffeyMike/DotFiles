@@ -1,0 +1,33 @@
+/* Layout "bar": one solid, flat bar; modules are coloured text with an accent underline. */
+window#waybar {
+  background: #{{ p.bg }};
+  border-bottom: 2px solid #{{ p.surface1 }};
+}
+
+#custom-launcher, #custom-media, #clock, #tray,
+#cpu, #memory, #backlight, #pulseaudio, #battery, #custom-theme, #custom-power {
+  padding: 0 10px;
+  color: #{{ p.fg }};
+}
+
+#workspaces button {
+  color: #{{ p.overlay }};
+  padding: 0 8px;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+}
+#workspaces button.active { color: #{{ p.accent }}; border-bottom-color: #{{ p.accent }}; }
+#workspaces button:hover { background: #{{ p.surface0 }}; }
+
+#custom-launcher { color: #{{ p.accent }}; font-size: 18px; }
+#clock { color: #{{ p.fg }}; font-weight: bold; }
+#cpu { color: #{{ p.blue }}; }
+#memory { color: #{{ p.purple }}; }
+#backlight { color: #{{ p.orange }}; }
+#pulseaudio { color: #{{ p.yellow }}; }
+#battery { color: #{{ p.green }}; }
+#battery.critical:not(.charging) {
+  animation: blink 0.5s linear infinite alternate;
+}
+#custom-theme { color: #{{ p.accent2 }}; }
+#custom-power { color: #{{ p.red }}; }

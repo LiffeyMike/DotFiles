@@ -1,0 +1,9 @@
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 6,
+  "modules-left": ["custom/launcher", "cpu", "memory", "custom/media", "tray"],
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": ["custom/updates", "custom/theme", "backlight", "pulseaudio", "clock", "battery", "custom/power"],
+  {% include "layouts/waybar/_shared.jsonc" %}
+}

@@ -1,13 +1,8 @@
 [cursor]
 style = "Block"
 
-[font]
-normal.family = 'JetbrainsMono Nerd Font'
-size = 16.0
-
 [window]
 #dynamic_padding = true
-opacity = 0.75
 
 [window.padding]
 x = 0
@@ -19,4 +14,5 @@ term = "xterm-256color"
 SHELL = "zsh"
 
 [general]
-import = ["~/.config/alacritty/themes/catppuccin-mocha.toml"]
+# Font, opacity and colours come from the active theme (`theme`).
+import = ["~/.local/state/theme/current/alacritty.toml"]

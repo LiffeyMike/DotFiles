@@ -1,0 +1,44 @@
+name = "Nord"
+
+[look]
+rounding = 4
+ui_rounding = 4
+gaps_in = 4
+gaps_out = 8
+border = ["cyan", "blue"]
+blur = false
+animations = "smooth"
+term_opacity = 0.95
+
+[layout]
+waybar = "bar"
+
+[palette]
+bg = "2e3440"
+bg_alt = "292e39"
+bg_dark = "242933"
+surface0 = "3b4252"
+surface1 = "434c5e"
+surface2 = "4c566a"
+overlay = "616e88"
+subtext = "d8dee9"
+fg = "eceff4"
+red = "bf616a"
+orange = "d08770"
+yellow = "ebcb8b"
+green = "a3be8c"
+teal = "8fbcbb"
+cyan = "88c0d0"
+blue = "81a1c1"
+purple = "b48ead"
+pink = "b48ead"
+accent = "88c0d0"
+accent2 = "81a1c1"
+
+[terminal]
+black = "3b4252"
+white = "e5e9f0"
+bright_black = "4c566a"
+bright_cyan = "8fbcbb"
+bright_white = "eceff4"
+cursor = "d8dee9"

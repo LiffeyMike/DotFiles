@@ -1,0 +1,37 @@
+name = "Catppuccin Mocha"
+wallpaper = "night-city.jpg"
+
+[look]
+rounding = 10
+ui_rounding = 12
+gaps_out = 14
+border = ["green", "teal", "purple"]
+animations = "bouncy"
+term_opacity = 0.8
+
+[palette]
+bg = "1e1e2e"
+bg_alt = "181825"
+bg_dark = "11111b"
+surface0 = "313244"
+surface1 = "45475a"
+surface2 = "585b70"
+overlay = "6c7086"
+subtext = "a6adc8"
+fg = "cdd6f4"
+red = "f38ba8"
+orange = "fab387"
+yellow = "f9e2af"
+green = "a6e3a1"
+teal = "94e2d5"
+cyan = "89dceb"
+blue = "89b4fa"
+purple = "cba6f7"
+pink = "f5c2e7"
+accent = "cba6f7"
+accent2 = "89b4fa"
+
+[terminal]
+magenta = "f5c2e7"
+white = "bac2de"
+cursor = "f5e0dc"

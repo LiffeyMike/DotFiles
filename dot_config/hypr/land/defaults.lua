@@ -12,9 +12,11 @@ M.DRUN = "rofi -show drun -show-icons -theme " .. M.MENU_THEME
 M.CLIPBOARD = "cliphist list | rofi -dmenu -p Clipboard -theme " .. M.MENU_THEME .. " | cliphist decode | wl-copy"
 M.SCREENSHOT = M.SCRIPTS .. "/screenshot"
 M.LOCK = M.SCRIPTS .. "/lock"
+-- Terminals attach to the shared tmux session; detaching drops to a plain shell.
 M.TMUX = "sh -c 'tmux attach -t Main || tmux new-session -s Main; exec $SHELL'"
-M.TERM = "alacritty --class=TERM -e " .. M.TMUX
-M.PI_5_SSH = "alacritty -e ssh pi"
+M.TERM = "ghostty -e " .. M.TMUX
+M.MAIN_TERM = "ghostty --class=main.term -e " .. M.TMUX -- dotted class: Ghostty needs a GTK application ID
+M.PI_5_SSH = "ghostty -e ssh pi"
 M.BROWSER = "vivaldi --enable-features=UseOzonePlatform --ozone-platform=wayland --class=BROWSER"
 M.GEFORCE_NOW =
 	"chromium --enable-features=UseOzonePlatform --ozone-platform=wayland --app=https://www.xbox.com/en-IE/play/games/forza-horizon-6-standard-edition/9N431PX143P8"

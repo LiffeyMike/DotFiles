@@ -1,6 +1,6 @@
 hl.window_rule({
 	name = "term-ws",
-	match = { class = "^(MAIN_TERM)$" },
+	match = { class = "^(main\\.term)$" },
 	workspace = "1 silent",
 })
 

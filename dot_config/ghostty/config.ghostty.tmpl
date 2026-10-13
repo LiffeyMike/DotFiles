@@ -2,10 +2,6 @@
 # sends SIGUSR2 on every switch so open windows reload. `?`: no error before the first render.
 config-file = ?{{ .chezmoi.homeDir }}/.local/state/theme/current/ghostty.conf
 
-# Every window starts in the shared tmux session, like the Alacritty terminal (SUPER+Return);
-# detaching drops to a plain shell. Run through /bin/sh -c by Ghostty.
-command = tmux attach -t Main || tmux new-session -s Main; exec $SHELL
-
 # Tiled by Hyprland and multiplexed by tmux: no GTK title bar, no close prompt.
 window-decoration = none
 confirm-close-surface = false

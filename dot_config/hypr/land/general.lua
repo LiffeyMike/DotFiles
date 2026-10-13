@@ -15,7 +15,7 @@ hl.on("hyprland.start", function()
 	app(d.SCRIPTS .. "/power-watch")
 
 	app("vivaldi --class=MAIN_BROWSER --enable-features=UseOzonePlatform --ozone-platform=wayland")
-	app("alacritty --class=MAIN_TERM -e " .. d.TMUX)
+	app(d.MAIN_TERM) -- workspace 1 (rules.lua)
 	app(d.SCRIPTS .. "/tools-workspace") -- pavucontrol, Blueman, NVIDIA Settings in a fixed order
 end)
 

@@ -220,7 +220,7 @@
     enable_recursive_icon_lookup = true
 
     # Set icon theme (only used for recursive icon lookup)
-    icon_theme = Adwaita, Papirus, Papirus-Dark
+    # icon_theme comes from the active theme (dunstrc.d/50-theme.conf).
     # You can also set multiple icon themes, with the leftmost one being used first.
     # icon_theme = "Adwaita, breeze"
 

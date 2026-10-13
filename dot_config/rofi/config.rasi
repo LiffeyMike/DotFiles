@@ -1,0 +1,7 @@
+/* Behaviour shared by every rofi menu (launcher, clipboard, theme picker).
+   Styling comes from the active theme via -theme, not from here. */
+configuration {
+  /* One left click runs the entry (rofi's default is select on click, run on double-click). */
+  me-select-entry: "";
+  me-accept-entry: "MousePrimary";
+}

@@ -60,8 +60,8 @@
 },
 "custom/launcher": {
   "format": " ",
-  "on-click": "wofi --show drun",
-  "on-click-right": "pkill wofi"
+  "on-click": "rofi -show drun -show-icons -theme ~/.local/state/theme/current/launcher.rasi",
+  "on-click-right": "pkill rofi"
 },
 "custom/theme": {
   "format": " ",

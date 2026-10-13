@@ -1,6 +1,7 @@
 name = "Tokyo Night"
 
 [look]
+icon_folders = "indigo"
 rounding = 12
 ui_rounding = 14
 gaps_in = 6

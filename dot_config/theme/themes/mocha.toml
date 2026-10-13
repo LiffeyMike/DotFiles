@@ -2,6 +2,7 @@ name = "Catppuccin Mocha"
 wallpaper = "night-city.jpg"
 
 [look]
+icon_folders = "violet"
 rounding = 10
 ui_rounding = 12
 gaps_out = 14

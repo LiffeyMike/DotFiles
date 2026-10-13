@@ -6,7 +6,10 @@ local home = os.getenv("HOME")
 M.HERE = home .. "/.config/hypr"
 M.SCRIPTS = M.HERE .. "/scripts"
 
-M.DRUN = "wofi --show drun"
+-- Menus are rofi, styled by the active theme (`theme` renders launcher.rasi).
+M.MENU_THEME = home .. "/.local/state/theme/current/launcher.rasi"
+M.DRUN = "rofi -show drun -show-icons -theme " .. M.MENU_THEME
+M.CLIPBOARD = "cliphist list | rofi -dmenu -p Clipboard -theme " .. M.MENU_THEME .. " | cliphist decode | wl-copy"
 M.SCREENSHOT = M.SCRIPTS .. "/screenshot"
 M.LOCK = M.SCRIPTS .. "/lock"
 M.TMUX = "sh -c 'tmux attach -t Main || tmux new-session -s Main; exec $SHELL'"

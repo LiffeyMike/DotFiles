@@ -23,6 +23,7 @@ shadow = true
 animations = "smooth"   # smooth | bouncy | none
 tiling = "dwindle"      # dwindle | master
 color_scheme = "prefer-dark"     # GTK: prefer-dark | prefer-light | default
+icon_folders = "blue"   # Papirus folder colour: blue violet nordic orange indigo teal …
 
 [layout]
 waybar = "pills"        # layouts/waybar/<name>.jsonc + .css

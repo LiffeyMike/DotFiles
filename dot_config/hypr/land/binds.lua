@@ -73,13 +73,13 @@ hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(d.BRIGHTINC), { repeating = true,
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(d.BRIGHTRED), { repeating = true, locked = true })
 
 -- Util
-hl.bind("SUPER + space", hl.dsp.exec_cmd("pkill wofi || " .. d.DRUN))
+hl.bind("SUPER + space", hl.dsp.exec_cmd("pkill rofi || " .. d.DRUN))
 hl.bind(M1 .. " + T", hl.dsp.exec_cmd("pkill rofi || " .. home .. "/.local/bin/theme menu")) -- theme picker
 hl.bind(M2 .. " + Return", hl.dsp.exec_cmd(d.PI_5_SSH))
 hl.bind(M1 .. " + Return", hl.dsp.exec_cmd(d.TERM))
 hl.bind(M2 .. " + S", hl.dsp.exec_cmd(d.SCREENSHOT))
 hl.bind(M1 .. " + X", hl.dsp.exec_cmd("wlogout"), { locked = true })
-hl.bind("SUPER + V", hl.dsp.exec_cmd("cliphist list | " .. d.DRUN .. " | cliphist decode | wl-copy"))
+hl.bind("SUPER + V", hl.dsp.exec_cmd("pkill rofi || " .. d.CLIPBOARD))
 hl.bind(M1 .. " + Escape", hl.dsp.exec_cmd(d.LOCK)) -- was M2+L, which collided with move-right
 
 -- Applications

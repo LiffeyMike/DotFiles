@@ -1,6 +1,7 @@
 name = "Gruvbox Dark"
 
 [look]
+icon_folders = "paleorange"
 rounding = 0
 ui_rounding = 0
 gaps_in = 6

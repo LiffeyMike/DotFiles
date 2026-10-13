@@ -1,6 +1,7 @@
 name = "Nord"
 
 [look]
+icon_folders = "nordic"
 rounding = 4
 ui_rounding = 4
 gaps_in = 4

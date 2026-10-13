@@ -1,4 +1,5 @@
 // Settings shared by every waybar layout. Included inside a layout's top-level object.
+// Icons are Nerd Font codepoints written as \u escapes (surrogate pairs above U+FFFF).
 
 // The bar only appears on the laptop panel; external monitors are left bar-free.
 "output": "eDP-1",
@@ -9,22 +10,22 @@
   "warp-on-scroll": false
 },
 "clock": {
-  "format": " {:%H:%M  %a %d %b}",
+  "format": "\uf017 {:%H:%M  %a %d %b}",
   "tooltip-format": "<tt>{calendar}</tt>"
 },
 "cpu": {
   "interval": 15,
-  "format": "  {}%",
+  "format": "\uf2db  {}%",
   "max-length": 10
 },
 "memory": {
   "interval": 30,
-  "format": " {}%",
+  "format": "\uf0c9 {}%",
   "max-length": 10
 },
 "backlight": {
   "tooltip": false,
-  "format": " {}%",
+  "format": "\uf0eb {}%",
   "on-scroll-up": "~/.config/hypr/scripts/buttons/bright+",
   "on-scroll-down": "~/.config/hypr/scripts/buttons/bright-"
 },
@@ -32,17 +33,17 @@
   "tooltip": false,
   "scroll-step": 5,
   "format": "{icon} {volume}%",
-  "format-muted": " muted",
+  "format-muted": "\udb81\udf5f muted",
   "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-  "format-icons": { "default": ["", "", ""] }
+  "format-icons": { "default": ["\uf026", "\uf027", "\uf028"] }
 },
 "battery": {
   "states": { "warning": 30, "critical": 15 },
   "format": "{icon}  {capacity}%",
-  "format-charging": " {capacity}%",
-  "format-plugged": " {capacity}%",
+  "format-charging": "\uf1e6 {capacity}%",
+  "format-plugged": "\uf1e6 {capacity}%",
   "format-alt": "{time} {icon}",
-  "format-icons": ["", "", "", "", ""]
+  "format-icons": ["\uf244", "\uf243", "\uf242", "\uf241", "\uf240"]
 },
 "tray": {
   "icon-size": 18,
@@ -53,18 +54,18 @@
   "format": "{icon} {}",
   "return-type": "json",
   "max-length": 20,
-  "format-icons": { "spotify": " ", "default": " " },
+  "format-icons": { "spotify": "\uf1bc ", "default": "\udb81\udf5a " },
   "escape": true,
   "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
   "on-click": "playerctl play-pause"
 },
 "custom/launcher": {
-  "format": " ",
+  "format": "\uf303 ",
   "on-click": "rofi -show drun -show-icons -theme ~/.local/state/theme/current/launcher.rasi",
   "on-click-right": "pkill rofi"
 },
 "custom/theme": {
-  "format": " ",
+  "format": "\udb80\udfd8 ",
   "tooltip-format": "Change theme",
   "on-click": "~/.local/bin/theme menu"
 },
@@ -76,6 +77,6 @@
   "on-click": "alacritty -e sudo pacman -Syu"
 },
 "custom/power": {
-  "format": " ",
+  "format": "\uf138 ",
   "on-click": "wlogout"
 }

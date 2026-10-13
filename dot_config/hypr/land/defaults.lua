@@ -20,8 +20,6 @@ M.VOLINC = M.SCRIPTS .. "/buttons/volume+"
 M.VOLRED = M.SCRIPTS .. "/buttons/volume-"
 M.BRIGHTINC = M.SCRIPTS .. "/buttons/bright+"
 M.BRIGHTRED = M.SCRIPTS .. "/buttons/bright-"
-M.KBDBRIGHTINC = M.SCRIPTS .. "/buttons/kbdbacklight+"
-M.KBDBRIGHTRED = M.SCRIPTS .. "/buttons/kbdbacklight-"
 
 M.NATURAL_SCROLL = true
 M.XWAYLAND_ZERO_SCALING = true

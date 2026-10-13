@@ -71,8 +71,6 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 -- Brightness
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(d.BRIGHTINC), { repeating = true, locked = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(d.BRIGHTRED), { repeating = true, locked = true })
-hl.bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd(d.KBDBRIGHTINC))
-hl.bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd(d.KBDBRIGHTRED))
 
 -- Util
 hl.bind("SUPER + space", hl.dsp.exec_cmd("pkill wofi || " .. d.DRUN .. " -s " .. home .. "/.config/wofi/menu.css"))

@@ -49,6 +49,7 @@ OUTPUTS = {
     "ghostty.conf": "templates/ghostty.conf",
     "tmux.conf": "templates/tmux.conf",
     "nvim.lua": "templates/nvim.lua",
+    "wlogout.css": "templates/wlogout.css",
 }
 
 ROLES = """bg bg_alt bg_dark surface0 surface1 surface2 overlay subtext fg

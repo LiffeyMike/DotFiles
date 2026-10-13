@@ -1,0 +1,11 @@
+# Keep Flatpak's NVIDIA GL extensions in step with the host driver. Managed by chezmoi (etc/).
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = nvidia-utils
+
+[Action]
+Description = Syncing Flatpak NVIDIA extensions to the new driver...
+When = PostTransaction
+Exec = /bin/sh /etc/pacman.d/scripts/nvidia-flatpak.sh

@@ -94,7 +94,6 @@ sshfs
 steam
 strace
 supercollider
-swaylock
 tex-gyre-fonts
 thunar
 tmux

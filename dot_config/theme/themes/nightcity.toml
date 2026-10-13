@@ -1,0 +1,50 @@
+name = "Night City"
+wallpaper = "night-city.jpg"
+
+# Cyberpunk 2077: acid yellow, hot magenta and electric cyan on near-black; hard edges.
+[look]
+icon_folders = "yellow"
+rounding = 0
+ui_rounding = 0
+gaps_in = 4
+gaps_out = 10
+border_size = 2
+border = ["yellow", "pink", "cyan"]
+border_angle = 135
+inactive_border = "surface2"
+animations = "smooth"
+term_opacity = 0.85
+
+[layout]
+waybar = "bar"
+
+[apps]
+nvim = "cyberdream"
+
+[palette]
+bg = "0d0e15"
+bg_alt = "0a0b10"
+bg_dark = "050508"
+surface0 = "161824"
+surface1 = "1f2233"
+surface2 = "2c3047"
+overlay = "5a607f"
+subtext = "a8b2c8"
+fg = "e8ecf4"
+red = "ff003c"
+orange = "ff8a00"
+yellow = "fcee0a"
+green = "05ffa1"
+teal = "00d9c0"
+cyan = "00f0ff"
+blue = "3d7bff"
+purple = "b14dff"
+pink = "ff2a6d"
+accent = "fcee0a"
+accent2 = "ff2a6d"
+
+[terminal]
+black = "1f2233"
+magenta = "ff2a6d"
+cyan = "00f0ff"
+bright_black = "5a607f"

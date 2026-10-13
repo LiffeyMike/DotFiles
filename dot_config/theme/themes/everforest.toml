@@ -1,0 +1,43 @@
+name = "Everforest"
+
+# Earthy greens and sand on a dark green-grey (Everforest dark, medium contrast).
+[look]
+icon_folders = "green"
+rounding = 10
+ui_rounding = 12
+gaps_in = 6
+gaps_out = 14
+border = ["green", "teal"]
+animations = "smooth"
+term_opacity = 0.92
+
+[layout]
+waybar = "bar"
+
+[apps]
+nvim = "everforest"
+
+[palette]
+bg = "2d353b"
+bg_alt = "272e33"
+bg_dark = "1e2326"
+surface0 = "343f44"
+surface1 = "3d484d"
+surface2 = "475258"
+overlay = "7a8478"
+subtext = "9da9a0"
+fg = "d3c6aa"
+red = "e67e80"
+orange = "e69875"
+yellow = "dbbc7f"
+green = "a7c080"
+teal = "83c092"
+cyan = "83c092"
+blue = "7fbbb3"
+purple = "d699b6"
+pink = "d699b6"
+accent = "a7c080"
+accent2 = "83c092"
+
+[terminal]
+black = "475258"

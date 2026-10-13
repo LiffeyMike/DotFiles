@@ -25,6 +25,40 @@ return {
 		opts = { transparent = true },
 	},
 	{
+		"scottmckendry/cyberdream.nvim",
+		lazy = true,
+		opts = { transparent = true },
+	},
+	{
+		"lunarvim/synthwave84.nvim",
+		lazy = true,
+		-- No transparency option: clear the editor backgrounds once it has loaded.
+		init = function()
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				pattern = "synthwave84",
+				callback = function()
+					for _, group in ipairs({ "Normal", "NormalNC", "SignColumn", "EndOfBuffer", "LineNr", "FoldColumn" }) do
+						local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+						hl.bg = nil
+						vim.api.nvim_set_hl(0, group, hl)
+					end
+				end,
+			})
+		end,
+	},
+	{
+		"rose-pine/neovim",
+		name = "rose-pine",
+		lazy = true,
+		opts = { styles = { transparency = true } },
+	},
+	{
+		"neanias/everforest-nvim",
+		main = "everforest",
+		lazy = true,
+		opts = { transparent_background_level = 1 },
+	},
+	{
 		"LazyVim/LazyVim",
 		opts = {
 			colorscheme = function()

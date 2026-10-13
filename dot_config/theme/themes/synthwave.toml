@@ -1,0 +1,43 @@
+name = "Synthwave '84"
+
+# Outrun: a neon sunset of hot pink, orange and gold on deep purple.
+[look]
+icon_folders = "pink"
+rounding = 10
+ui_rounding = 12
+gaps_in = 6
+gaps_out = 14
+border_size = 3
+border = ["pink", "accent2", "yellow"]
+border_angle = 90
+animations = "bouncy"
+term_opacity = 0.85
+
+[apps]
+nvim = "synthwave84"
+
+[palette]
+bg = "262335"
+bg_alt = "241b2f"
+bg_dark = "171520"
+surface0 = "2a2139"
+surface1 = "34294f"
+surface2 = "463465"
+overlay = "848bbd"
+subtext = "c8ccd4"
+fg = "f4eeff"
+red = "fe4450"
+orange = "ff8b39"
+yellow = "fede5d"
+green = "72f1b8"
+teal = "03edf9"
+cyan = "36f9f6"
+blue = "2ee2fa"
+purple = "b893ce"
+pink = "ff7edb"
+accent = "ff7edb"
+accent2 = "f97e72"
+
+[terminal]
+magenta = "ff7edb"
+cyan = "36f9f6"

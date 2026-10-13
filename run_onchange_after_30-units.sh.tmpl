@@ -1,0 +1,13 @@
+#!/bin/sh
+# Enable the systemd units listed in packages/. chezmoi re-runs this when a list changes:
+# units-system.txt {{ include "packages/units-system.txt" | sha256sum }}
+# units-user.txt   {{ include "packages/units-user.txt" | sha256sum }}
+set -eu
+cd "{{ .chezmoi.sourceDir }}/packages"
+
+for u in $(cat units-system.txt); do
+    systemctl is-enabled -q "$u" 2>/dev/null || sudo systemctl enable "$u"
+done
+for u in $(cat units-user.txt); do
+    systemctl --user is-enabled -q "$u" 2>/dev/null || systemctl --user enable "$u"
+done

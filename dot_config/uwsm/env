@@ -1,0 +1,15 @@
+## Environement variables
+export WAYLAND_DISPLAY=wayland-1
+export GDK_BACKEND=wayland
+export QT_QPA_PLATFORM=wayland
+export SDL_VIDEODRIVER=wayland
+export CLUTTER_BACKEND=wayland
+export LIBVA_DRIVER_NAME=nvidia
+export GBM_BACKEND=nvidia-drm
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+# NVIDIA shader disk cache: allow 10 GiB and never trim it (default cap is small, evicts across games)
+export __GL_SHADER_DISK_CACHE_SIZE=10737418240
+export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
+
+# Secrets (age-encrypted in chezmoi)
+[ -f "$HOME/.config/secrets.env" ] && . "$HOME/.config/secrets.env"

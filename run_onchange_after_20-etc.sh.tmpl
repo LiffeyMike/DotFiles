@@ -1,0 +1,32 @@
+#!/bin/sh
+# Copy the files under etc/ into /etc. They're copied, not symlinked, because root config and the
+# initramfs shouldn't depend on /home. chezmoi re-runs this when any of them change:
+# {{ output "sh" "-c" (printf "cd '%s' && find etc -type f | sort | xargs sha256sum" .chezmoi.sourceDir) | sha256sum }}
+set -eu
+cd "{{ .chezmoi.sourceDir }}"
+
+rebuild_initramfs=0
+reload_systemd=0
+for f in $(find etc -type f | sort); do
+    if ! cmp -s "$f" "/$f"; then
+        echo "installing /$f"
+        sudo install -Dm644 "$f" "/$f"
+        case "$f" in
+            etc/modprobe.d/*) rebuild_initramfs=1 ;;
+            etc/systemd/*) reload_systemd=1 ;;
+        esac
+    fi
+done
+
+if [ "$reload_systemd" = 1 ]; then
+    sudo systemctl daemon-reload
+fi
+
+# modprobe.d options for early-loaded modules (nvidia) are baked into the initramfs.
+if [ "$rebuild_initramfs" = 1 ]; then
+    if command -v mkinitcpio >/dev/null; then
+        sudo mkinitcpio -P
+    elif command -v dracut >/dev/null; then
+        sudo dracut --regenerate-all --force
+    fi
+fi

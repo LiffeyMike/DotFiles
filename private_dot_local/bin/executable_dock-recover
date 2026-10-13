@@ -1,0 +1,96 @@
+#!/bin/bash
+# dock-recover: un-wedge Hyprland after the WD19TB dock re-enumerates.
+#
+# After a dock reset aquamarine (Hyprland's DRM backend) forgets the CRTC of the
+# vanished connector without telling the kernel to release it, then hands that
+# CRTC to the returning monitor. The kernel refuses every commit from then on
+# (EINVAL) and the affected monitors sit at 0x0.
+#
+# Verified procedure (2026-09-11): disable the wedged outputs in Hyprland, switch
+# VT away and back so the kernel console re-owns the outputs and aquamarine
+# re-reads CRTC state, then reload the config to re-enable them. A VT round-trip
+# on its own was not sufficient.
+#
+#   dock-recover          recover only if a monitor is wedged (0x0)
+#   dock-recover --force  reset every external output regardless (Super+R): a monitor
+#                         can be black while Hyprland still reports a normal mode
+
+LOG="$HOME/dock-snapshots/recover.log"
+mkdir -p "$(dirname "$LOG")"
+say() { echo "$(date '+%F %T') $*" | tee -a "$LOG"; logger -t dock-recover -- "$*"; }
+modes() { hyprctl monitors 2>/dev/null | awk '/^Monitor/{n=$2} /^\t[0-9]+x[0-9]+@/{printf "%s=%s ", n, $1}'; }
+wedged() { hyprctl monitors 2>/dev/null | grep -q '^	0x0@'; }
+wedged_names() { hyprctl monitors 2>/dev/null | awk '/^Monitor/{n=$2} /^\t0x0@/{print n}'; }
+
+# wait_for SECONDS CMD...: poll CMD every 0.1 s until it succeeds; fail on timeout.
+wait_for() {
+	local deadline=$((SECONDS + $1)); shift
+	until "$@"; do
+		[ "$SECONDS" -ge "$deadline" ] && return 1
+		sleep 0.1
+	done
+}
+active_vt() { [ "$(sed 's/tty//' /sys/class/tty/tty0/active)" = "$1" ]; }
+hypr_up() { hyprctl monitors >/dev/null 2>&1; }
+shown() { hyprctl monitors 2>/dev/null | grep -q "^Monitor $1 "; }
+gone() { ! shown "$1"; }
+# restored: every output that was wedged is listed again with a real mode.
+restored() {
+	local m
+	wedged && return 1
+	for m in $WEDGED; do shown "$m" || return 1; done
+}
+
+SEAT=/org/freedesktop/login1/seat/seat0
+# vt_roundtrip DWELL: switch to another VT, stay DWELL seconds so the kernel
+# console takes the outputs over, then switch back.
+vt_roundtrip() {
+	local vt other
+	vt=$(sed 's/tty//' /sys/class/tty/tty0/active)
+	other=$((vt == 1 ? 2 : 1))
+	busctl --system call org.freedesktop.login1 $SEAT org.freedesktop.login1.Seat SwitchTo u "$other" || { say "SwitchTo $other failed"; return 1; }
+	wait_for 3 active_vt "$other"
+	sleep "$1"
+	busctl --system call org.freedesktop.login1 $SEAT org.freedesktop.login1.Seat SwitchTo u "$vt" || { say "SwitchTo $vt failed"; return 1; }
+	wait_for 3 active_vt "$vt"
+	wait_for 4 hypr_up
+}
+
+if [ "$1" != "--force" ] && ! wedged; then
+	say "nothing to do: $(modes)"
+	exit 0
+fi
+
+say "before: $(modes)"
+notify() { command -v notify-send >/dev/null && notify-send -t 8000 "Dock recovery" "$*"; }
+notify "Recovering the external monitors. The screen will flicker briefly."
+start=$EPOCHREALTIME
+if [ "$1" = "--force" ]; then
+	WEDGED=$(hyprctl monitors 2>/dev/null | awk '/^Monitor/ && $2 !~ /^eDP/{print $2}')
+else
+	WEDGED=$(wedged_names)
+fi
+for m in $WEDGED; do
+	say "disabling $m"
+	hyprctl eval "hl.monitor({ output = \"$m\", disabled = true })" >/dev/null
+	wait_for 2 gone "$m"
+done
+# Fast attempt first; if that is not enough, retry with the original slow timings.
+vt_roundtrip 0.5 || exit 1
+hyprctl reload >/dev/null
+if ! wait_for 3 restored; then
+	say "still wedged: $(modes)"
+	say "retrying once with a slower VT round-trip"
+	vt_roundtrip 3 || exit 1
+	hyprctl reload >/dev/null
+	if ! wait_for 5 restored; then
+		say "FAILED: $(modes)"
+		notify "Recovery failed. Log out and back in to restore the monitors."
+		exit 2
+	fi
+fi
+say "recovered in $(printf '%.1f' "$(bc <<< "$EPOCHREALTIME - $start")") s: $(modes)"
+# waybar drops its bar for an output that went away and does not bring it
+# back when the output returns; a config reload (SIGUSR2) recreates it.
+pkill -USR2 -x waybar && say "waybar reloaded"
+notify "External monitors restored."

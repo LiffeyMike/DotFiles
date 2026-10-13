@@ -1,0 +1,5 @@
+minecraft-launcher
+nuvio-desktop-bin
+oppenheimer
+protontricks-git
+voxtype

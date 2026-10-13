@@ -1,0 +1,22 @@
+[cursor]
+style = "Block"
+
+[font]
+normal.family = 'JetbrainsMono Nerd Font'
+size = 16.0
+
+[window]
+#dynamic_padding = true
+opacity = 0.75
+
+[window.padding]
+x = 0
+y = 0
+
+[env]
+term = "xterm-256color"
+
+SHELL = "zsh"
+
+[general]
+import = ["~/.config/alacritty/themes/hyper.toml"]

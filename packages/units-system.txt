@@ -1,0 +1,14 @@
+cachyos-iw-set-regdomain.path
+ananicy-cpp.service
+bluetooth.service
+docker.socket
+NetworkManager-dispatcher.service
+NetworkManager-wait-online.service
+NetworkManager.service
+nvidia-persistenced.service
+nvidia-powerd.service
+scx.service
+systemd-resolved-monitor.socket
+systemd-resolved-varlink.socket
+fstrim.timer
+paccache.timer

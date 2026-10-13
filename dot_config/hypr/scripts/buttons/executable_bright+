@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+if ! [ -x "$(command -v brightnessctl)" ]; then
+  notify-send "brightnessctl not found"
+  exit 1
+fi
+
+brightnessctl s +5%
+notify-send
+dunstify -h string:x-dunst-stack-tag:light "$(brightnessctl g)"
+

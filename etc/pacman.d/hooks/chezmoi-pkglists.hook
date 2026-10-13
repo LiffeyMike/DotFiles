@@ -1,0 +1,11 @@
+# Keep the package lists in the chezmoi source up to date. Managed by chezmoi (etc/).
+[Trigger]
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Updating chezmoi package lists...
+When = PostTransaction
+Exec = /bin/sh /etc/pacman.d/scripts/chezmoi-pkglists.sh

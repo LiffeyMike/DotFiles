@@ -1,0 +1,117 @@
+#systeminfo
+alias probe="sudo -E hw-probe -all -upload"
+alias gpu_temp="nvidia-smi"
+
+alias ls="ls -a"
+
+#pacman unlock
+alias unlock="sudo rm /var/lib/pacman/db.lck"
+
+#available free memory
+alias free="free -mt"
+
+#continue download
+alias wget="wget -c"
+
+#readable output
+alias df='df -h'
+
+#Pacman for software managment
+alias search='sudo pacman -Qs'
+alias query='sudo pacman -Ss'
+alias remove='sudo pacman -R'
+alias install='sudo pacman -S'
+alias linstall='sudo pacman -U '
+alias update='sudo pacman -Syyu'
+alias clrcache='sudo pacman -Scc'
+alias orphans='sudo pacman -Rns $(pacman -Qtdq)'
+
+
+#Flatpak Update
+alias fpup='flatpak update'
+
+#get fastest mirrors in your neighborhood
+alias ram='rate-mirrors --allow-root arch | sudo tee /etc/pacman.d/mirrorlist'
+alias reft='sudo systemctl enable reflector.service reflector.timer && sudo systemctl start reflector.service reflector.timer'
+
+#quickly kill stuff
+alias kc='killall conky'
+
+#Bash aliases
+alias mkfile='touch'
+alias jctl='journalctl -p 3 -xb'
+alias reload='cd ~ && source ~/.zshrc'
+alias cls='clear && fastfetch --logo-color-1 blue --logo-color-2 red --color magenta'
+
+#hardware info --short
+alias hw="hwinfo --short"
+
+#GiT  command
+alias gclone='git clone '
+
+#userlist
+alias userlist="cut -d: -f1 /etc/passwd"
+
+#Copy/Remove files/dirs
+alias rmd='rm -r'
+alias srm='sudo rm'
+alias srmd='sudo rm -r'
+alias cpd='cp -R'
+#alias scp='sudo cp'
+alias scpd='sudo cp -R'
+
+#zsh config
+alias zshrc='nvim ~/.config/.zshrc'
+
+#cd/ aliases
+alias home='cd ~'
+alias etc='cd /etc/'
+alias music='cd ~/Music'
+alias vids='cd ~/Videos'
+alias conf='cd ~/.config'
+alias confe='conf && nvim .'
+alias desk='cd ~/Desktop'
+alias pics='cd ~/Pictures'
+alias dldz='cd ~/Downloads'
+alias docs='cd ~/Documents'
+alias sapps='cd /usr/share/applications'
+alias lapps='cd ~/.local/share/applications'
+
+#switch between lightdm and sddm
+alias tolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
+alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
+
+#Recent Installed Packages
+alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
+alias riplong="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -3000 | nl"
+
+#Package Info
+alias info='sudo pacman -Si '
+alias infox='sudo pacman -Sii '
+
+##Refresh Keys
+alias rkeys='sudo pacman-key --refresh-keys'
+
+#shutdown or reboot
+alias sr="sudo reboot"
+alias ssn="sudo shutdown now"
+
+#develop
+alias e="nvim ."
+alias vi="nvim"
+alias svi="sudo nvim"
+
+#projects
+alias workspace="cd ~/workspace"
+alias leet="cd ~/workspace/LeetCode/"
+alias leete="cd ~/workspace/LeetCode/ && nvim ."
+alias hn="cd ~/workspace/HackerNewsClone/"
+
+#Raspberry Pi
+alias pi_connect='ssh pi'
+alias pi_connect_local='ssh pi-local'
+
+
+#misc commands
+alias matrix='cmatrix -s -C green'
+alias kanban='oppenheimer ./tasks.md'

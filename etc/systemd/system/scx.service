@@ -1,0 +1,10 @@
+[Unit]
+Description=sched_ext scheduler
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/scx_lavd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

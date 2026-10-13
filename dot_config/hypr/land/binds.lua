@@ -61,7 +61,7 @@ hl.bind(M1 .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- Volume
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(d.VOLRED), { repeating = true, locked = true })
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(d.VOLINC), { repeating = true, locked = true })
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && " .. d.SCRIPTS .. "/buttons/osd volume"), { locked = true })
 
 -- Media
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })

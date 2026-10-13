@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# On-screen display for the volume and brightness keys: one notification per kind that updates
+# in place (dunst stack tag), with a level bar and a Papirus icon matching the level.
+# Usage: osd volume | osd brightness
+case $1 in
+volume)
+	level=$(pamixer --get-volume)
+	title=Volume
+	if [ "$(pamixer --get-mute)" = true ]; then
+		icon=muted title="Volume (muted)"
+	elif [ "$level" -eq 0 ]; then icon=muted
+	elif [ "$level" -lt 34 ]; then icon=low
+	elif [ "$level" -lt 67 ]; then icon=medium
+	else icon=high
+	fi
+	icon=notification-audio-volume-$icon
+	;;
+brightness)
+	level=$(brightnessctl -m | cut -d, -f4 | tr -d %)
+	title=Brightness
+	if [ "$level" -lt 34 ]; then icon=low
+	elif [ "$level" -lt 67 ]; then icon=medium
+	elif [ "$level" -lt 100 ]; then icon=high
+	else icon=full
+	fi
+	icon=notification-display-brightness-$icon
+	;;
+*)
+	echo "usage: osd volume|brightness" >&2
+	exit 2
+	;;
+esac
+
+# dunst doesn't resolve Papirus icons by name, so pass the file. The active icon theme is e.g.
+# Papirus-Dark-violet; the notification icons live in its base (Papirus-Dark).
+base=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | tr -d "'")
+base=${base%-*}
+for dir in "/usr/share/icons/$base" /usr/share/icons/Papirus-Dark /usr/share/icons/Papirus; do
+	if [ -f "$dir/48x48/status/$icon.svg" ]; then
+		icon=$dir/48x48/status/$icon.svg
+		break
+	fi
+done
+
+notify-send -a osd -u low -t 1500 -i "$icon" \
+	-h "int:value:$level" -h "string:x-dunst-stack-tag:$1" "$title" "$level%"

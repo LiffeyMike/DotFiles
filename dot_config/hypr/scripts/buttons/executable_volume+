@@ -1,9 +1,8 @@
 #!/usr/bin/env sh
-
-if ! [ -x "$(command -v pamixer)" ]; then
-  notify-send "pamixer not found"
-  exit 1
+if ! command -v pamixer >/dev/null; then
+	notify-send "pamixer not found"
+	exit 1
 fi
 
-pamixer -i 5
-dunstify -h string:x-dunst-stack-tag:volume "$(pamixer --get-volume)"
+pamixer -i 5 >/dev/null
+exec "$(dirname "$0")/osd" volume

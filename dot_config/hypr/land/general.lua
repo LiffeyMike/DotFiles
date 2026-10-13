@@ -14,11 +14,9 @@ hl.on("hyprland.start", function()
 	app("wl-clip-persist --clipboard regular")
 	app(d.SCRIPTS .. "/power-watch")
 
-	app("nvidia-settings")
 	app("vivaldi --class=MAIN_BROWSER --enable-features=UseOzonePlatform --ozone-platform=wayland")
 	app("alacritty --class=MAIN_TERM -e " .. d.TMUX)
-	app("blueman-manager")
-	app("sh -c 'sleep 10; exec pavucontrol'") -- delayed so the headset finishes connecting first
+	app(d.SCRIPTS .. "/tools-workspace") -- pavucontrol, Blueman, NVIDIA Settings in a fixed order
 end)
 
 hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })

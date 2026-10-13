@@ -10,6 +10,18 @@ hl.window_rule({
 	workspace = "2 silent",
 })
 
+-- Workspace 9 holds the system tools. Master layout places windows by opening order (not by
+-- focus or mouse position), and scripts/tools-workspace opens them in a fixed order:
+-- pavucontrol as master on the right, Blueman over NVIDIA Settings on the left.
+hl.workspace_rule({
+	workspace = "9",
+	layout = "master",
+	layout_opts = { orientation = "right" }, -- orientation is the only per-workspace option
+})
+
+-- Master split ratio is global; workspace 9 is the only master-layout workspace.
+hl.config({ master = { mfact = 0.5 } })
+
 hl.window_rule({
 	name = "nvidia-settings-ws",
 	match = { class = "^(nvidia-settings)$" },
@@ -19,13 +31,13 @@ hl.window_rule({
 hl.window_rule({
 	name = "blueman-ws",
 	match = { class = "^(blueman-manager)$" },
-	workspace = "8 silent",
+	workspace = "9 silent",
 })
 
 hl.window_rule({
 	name = "pavucontrol-ws",
 	match = { class = "^(org.pulseaudio.pavucontrol)$" },
-	workspace = "8 silent",
+	workspace = "9 silent",
 })
 
 hl.window_rule({

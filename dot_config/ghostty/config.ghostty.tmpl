@@ -1,6 +1,8 @@
 # Ghostty. Font, opacity and colours come from the active theme (`theme`), which also
 # sends SIGUSR2 on every switch so open windows reload. `?`: no error before the first render.
 config-file = ?{{ .chezmoi.homeDir }}/.local/state/theme/current/ghostty.conf
+# Theme switches reload every window; keep the copy toast, drop the reload one.
+app-notifications = no-config-reload
 
 # Tiled by Hyprland and multiplexed by tmux: no GTK title bar, no close prompt.
 window-decoration = none

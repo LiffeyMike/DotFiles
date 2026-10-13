@@ -1,4 +1,5 @@
 name = "Tokyo Night"
+wallpapers = "TokyoNight"
 
 [look]
 icon_folders = "indigo"

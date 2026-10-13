@@ -1,8 +1,16 @@
 # Every theme setting and its default. A theme file in this folder only lists what it changes;
 # `theme` deep-merges it over this file. Colours are bare hex (no '#').
 name = "Unnamed"
-# Image in ~/Pictures/Wallpapers. Empty: a gradient is generated from the palette.
-wallpaper = ""
+# Folder in ~/Pictures/Wallpapers with an image per monitor role, named after the role
+# (Primary.jpg, Secondary.jpg, Tertiary.jpg). Empty: a gradient is generated from the palette.
+wallpapers = ""
+
+# Which screen has which wallpaper role, as hyprpaper selectors (output name or desc:...,
+# matching land/monitors.lua). Any other screen gets Primary.
+[monitors]
+primary = "eDP-1"                                            # laptop panel
+secondary = "desc:Microstep MSI MAG 27C6X CE0M035805785"     # middle, landscape
+tertiary = "desc:Dell Inc. DELL U2419H 8M8RT83"              # right, portrait
 
 [look]
 font = "JetBrainsMono Nerd Font"

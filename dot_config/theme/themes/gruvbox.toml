@@ -1,4 +1,5 @@
 name = "Gruvbox Dark"
+wallpapers = "Gruvbox"
 
 [look]
 icon_folders = "paleorange"

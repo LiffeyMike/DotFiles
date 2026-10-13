@@ -1,5 +1,5 @@
 name = "Catppuccin Mocha"
-wallpaper = "night-city.jpg"
+wallpapers = "CatpuccinMocha"
 
 [look]
 icon_folders = "violet"

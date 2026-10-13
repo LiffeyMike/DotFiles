@@ -241,16 +241,11 @@ def render(t):
     env.filters["lua"] = lambda v: json.dumps(v)  # bool/number/string literals match Lua's
     env.filters["hypr"] = lambda hexstr, alpha=0xFF: f"0x{alpha:02x}{hexstr}"
 
-    wall = t["wallpaper"]
-    if wall:
-        wall_path = WALLPAPERS / wall
-        if not wall_path.is_file():
-            die(f"{t['id']}: wallpaper {wall_path} not found")
-    else:
-        wall_path = gradient_wallpaper(t)
+    walls = wallpapers(t)
 
     ctx = {"theme": t, "p": t["palette"], "look": t["look"], "layout": t["layout"],
-           "apps": t["apps"], "term": t["term"], "wallpaper_path": str(wall_path)}
+           "apps": t["apps"], "term": t["term"], "wallpaper_path": str(walls[""]),
+           "wallpapers": {m: str(path) for m, path in walls.items()}}
 
     out = STATE / "rendered" / t["id"]
     tmp = out.with_name(out.name + ".tmp")
@@ -265,13 +260,32 @@ def render(t):
         (tmp / name).write_text(text)
     shutil.rmtree(out, ignore_errors=True)
     tmp.rename(out)
-    return out, wall_path
+    return out, walls
+
+
+def wallpapers(t):
+    """hyprpaper monitor selector -> image, from the theme's folder in ~/Pictures/Wallpapers.
+
+    The folder holds one image per monitor role, named after it (Primary.jpg, Secondary.png,
+    ...); [monitors] in defaults.toml says which screen has which role. A missing role falls
+    back to Primary, and "" (every other monitor) gets Primary. No folder: palette gradient.
+    """
+    if not t["wallpapers"]:
+        return {"": gradient_wallpaper(t)}
+    folder = WALLPAPERS / t["wallpapers"]
+    images = {f.stem.lower(): f for f in folder.glob("*") if f.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")}
+    if "primary" not in images:
+        die(f"{t['id']}: no Primary image in {folder}")
+    walls = {"": images["primary"]}
+    for role, monitor in t["monitors"].items():
+        walls[monitor] = images.get(role, images["primary"])
+    return walls
 
 
 def activate(theme_id, reload=True):
     t = load(theme_id)
     t["icon_theme"] = icon_theme(t)
-    out, wall = render(t)
+    out, walls = render(t)
 
     link = STATE / "current"
     tmp_link = STATE / "current.tmp"
@@ -283,7 +297,8 @@ def activate(theme_id, reload=True):
 
     if reload and os.environ.get("HYPRLAND_INSTANCE_SIGNATURE"):
         run("hyprctl", "reload", "config-only")
-        run("hyprctl", "hyprpaper", "wallpaper", f",{wall}")
+        for monitor, wall in walls.items():  # "" (every monitor) first, then each role's screen
+            run("hyprctl", "hyprpaper", "wallpaper", f"{monitor},{wall}")
         run("pkill", "-USR2", "-x", "waybar")
         run("pkill", "-USR2", "-x", "ghostty")  # Ghostty reloads its config on SIGUSR2
         run("tmux", "source-file", "-q", str(STATE / "current/tmux.conf"))  # no-op without a server

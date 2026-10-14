@@ -12,6 +12,6 @@ udevadm monitor --udev --subsystem-match=power_supply | while read -r _; do
 	if [ "$now" = 1 ]; then
 		notify-send -a power "On AC" "Full profile: 144Hz, animations, blur"
 	else
-		notify-send -a power "On battery" "Saver profile: 60Hz, no animations or blur"
+		notify-send -a power "On battery" "Saver profile: 60Hz, no blur or shadows"
 	fi
 done

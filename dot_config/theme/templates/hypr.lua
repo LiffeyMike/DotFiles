@@ -26,7 +26,7 @@ hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "theme" 
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "theme" })
 hl.animation({ leaf = "border", enabled = true, speed = 10, bezier = "default" })
 hl.animation({ leaf = "fade", enabled = true, speed = 5, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "overshot", style = "slidevert" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "overshot", style = "slide" })
 {% elif look.animations == "smooth" %}
 
 hl.curve("theme", { type = "bezier", points = { { 0.25, 1.0 }, { 0.5, 1.0 } } })
@@ -35,5 +35,5 @@ hl.animation({ leaf = "windowsOut", enabled = true, speed = 4, bezier = "theme",
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "theme" })
 hl.animation({ leaf = "border", enabled = true, speed = 8, bezier = "default" })
 hl.animation({ leaf = "fade", enabled = true, speed = 4, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "theme", style = "fade" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "theme", style = "slide" })
 {% endif %}

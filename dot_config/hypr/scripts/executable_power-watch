@@ -1,10 +1,34 @@
 #!/usr/bin/env bash
 # Reload Hyprland when the AC adapter is plugged or unplugged. The Lua config reads
 # the adapter state at load (land/power.lua), so a reload is all a switch needs.
+# Also warns when the battery runs low, once per level per discharge. This battery sends
+# no udev events as its charge drops, so the level is checked every minute as well.
 ac=/sys/class/power_supply/ACAD/online
+bat=/sys/class/power_supply/BAT1
+low=20       # UPower's PercentageLow; at its PercentageAction (2%) it hibernates/powers off
+critical=5   # UPower's PercentageCritical
 last=$(cat "$ac")
+warned=100   # lowest level already warned about this discharge
 
-udevadm monitor --udev --subsystem-match=power_supply | while read -r _; do
+check_battery() {
+	local capacity status
+	capacity=$(cat "$bat/capacity") status=$(cat "$bat/status")
+	if [ "$status" != Discharging ]; then
+		warned=100
+	elif [ "$capacity" -le "$critical" ] && [ "$warned" -gt "$critical" ]; then
+		warned=$critical
+		notify-send -a power -u critical "Battery critical: ${capacity}%" "Plug in now: at 2% the laptop hibernates or powers off."
+	elif [ "$capacity" -le "$low" ] && [ "$warned" -gt "$low" ]; then
+		warned=$low
+		notify-send -a power "Battery low: ${capacity}%" "Plug in soon."
+	fi
+}
+
+check_battery
+while :; do
+	# A timeout (status > 128) just means a periodic check; anything else is the monitor ending.
+	read -r -t 60 _ || [ $? -gt 128 ] || break
+	check_battery
 	now=$(cat "$ac")
 	[ "$now" = "$last" ] && continue
 	last=$now
@@ -14,4 +38,4 @@ udevadm monitor --udev --subsystem-match=power_supply | while read -r _; do
 	else
 		notify-send -a power "On battery" "Saver profile: 60Hz, no blur or shadows"
 	fi
-done
+done < <(udevadm monitor --udev --subsystem-match=power_supply)

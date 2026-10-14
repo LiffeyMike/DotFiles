@@ -56,8 +56,9 @@ local HOMES = {
 	["5"] = MIDDLE,
 	["6"] = RIGHT,
 	["7"] = RIGHT,
-	["8"] = LAPTOP,
+	["8"] = RIGHT,
 	["9"] = RIGHT,
+	["10"] = LAPTOP,
 }
 
 for ws, mon in pairs(HOMES) do

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Waybar cava visualiser (this waybar is built without its native cava module).
+# Usage: waybar-cava BARS COLOUR0 .. COLOUR7  -- colours are bare hex per bar height, lowest first.
+# Prints one Pango-markup line per frame; an empty line when silent hides the module.
+
+bars=$(( $1 / 2 * 2 )); shift  # stereo output needs an even bar count
+conf="${XDG_RUNTIME_DIR:-/tmp}/waybar-cava.conf"
+cat >"$conf" <<EOF
+[general]
+bars = $bars
+framerate = 30
+sleep_timer = 1
+
+[input]
+method = pipewire
+
+[output]
+method = raw
+raw_target = /dev/stdout
+data_format = ascii
+ascii_max_range = 7
+bar_delimiter = 59
+frame_delimiter = 10
+EOF
+
+cava -p "$conf" | awk -F';' -v colours="$*" '
+BEGIN { split("▁ ▂ ▃ ▄ ▅ ▆ ▇ █", bar, " "); split(colours, col, " ") }
+{
+    out = ""; loud = 0
+    for (i = 1; i <= NF; i++) {
+        if ($i == "") continue
+        v = $i + 1; loud += $i
+        out = out "<span color=\"#" col[v] "\">" bar[v] "</span>"
+    }
+    print (loud ? out : ""); fflush()
+}'

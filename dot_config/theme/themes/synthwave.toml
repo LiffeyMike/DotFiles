@@ -42,3 +42,6 @@ accent2 = "f97e72"
 [terminal]
 magenta = "ff7edb"
 cyan = "36f9f6"
+
+[layout]
+waybar = "neon"

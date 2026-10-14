@@ -198,6 +198,16 @@ def preview(t):
         for role in ["blue", "purple", "accent", "orange", "yellow", "green", "teal", "red"]:
             c.rect(x, 10, 46, 16, p[role])
             x += 58
+    elif t["layout"]["waybar"] == "neon":
+        g = 8 + look["gaps_out"] // 2  # floats in from the edges, like the windows below
+        c.rect(g, 4, 480 - 2 * g, 26, p["bg_dark"], p[look["border"][0]], bw)
+        c.rect(g + 10, 12, 12, 10, p["cyan"])
+        c.rect(g + 30, 12, 40, 10, p["yellow"])
+        for i in range(40):  # visualiser
+            h = 2 + (i * 7 + i * i) % 9
+            c.rect(110 + i * 6, 24 - h, 4, h, p["accent"] if h > 6 else p["purple"])
+        for i, role in enumerate(["accent", "orange", "yellow", "teal", "red"]):
+            c.rect(480 - g - 100 + i * 18, 12, 12, 10, p[role])
     else:
         c.rect(0, 0, 480, 30, p["bg"])
         c.rect(0, 30, 480, 2, p["surface1"])

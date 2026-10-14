@@ -1,0 +1,28 @@
+// Layout "neon": opaque floating bar framed like the windows; launcher, clock and tray | cava filling the middle | focused
+// workspace and status. Pick it with [layout] waybar = "neon"; see cava_bars in defaults.toml.
+{
+  "layer": "top",
+  "position": "top",
+  "height": {{ 30 + 2 * look.border_size }},
+  // Float like a window: the same gap from the screen edges as gaps_out.
+  "margin-top": {{ look.gaps_out }},
+  "margin-left": {{ look.gaps_out }},
+  "margin-right": {{ look.gaps_out }},
+  "expand-center": true,  // the visualiser fills the middle
+  "modules-left": ["custom/launcher", "clock", "tray"],
+  "modules-center": ["custom/cava"],
+  "modules-right": ["custom/workspace", "custom/media", "custom/updates", "backlight", "pulseaudio", "battery", "custom/theme", "custom/power"],
+  "custom/workspace": {
+    "exec": "$HOME/.config/system_scripts/waybar-workspace",
+    "format": "\uf2d2 {}",
+    "tooltip": false
+  },
+  "custom/cava": {
+    // Bar count, then bar colours by height, lowest first: a ramp from dim to warm.
+    "exec": "$HOME/.config/system_scripts/waybar-cava {{ layout.cava_bars }} {{ p.surface2 }} {{ p.purple }} {{ p.purple }} {{ p.pink }} {{ p.pink }} {{ p.accent2 }} {{ p.orange }} {{ p.yellow }}",
+    "expand": true,
+    "tooltip": false,
+    "on-click": "playerctl play-pause"
+  },
+  {% include "layouts/waybar/_shared.jsonc" %}
+}

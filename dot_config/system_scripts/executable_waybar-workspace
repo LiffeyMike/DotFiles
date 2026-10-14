@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+"""Waybar: print the focused Hyprland workspace, then a new line each time focus moves.
+
+hyprland/workspaces' active-only still lists persistent workspaces, and every workspace here
+is persistent, so this follows Hyprland's event socket instead.
+"""
+import json
+import os
+import socket
+import subprocess
+
+sig = os.environ["HYPRLAND_INSTANCE_SIGNATURE"]
+runtime = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+
+
+def show(name):
+    print(name, flush=True)
+
+
+show(json.loads(subprocess.run(["hyprctl", "activeworkspace", "-j"], capture_output=True, text=True).stdout)["name"])
+
+with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+    s.connect(f"{runtime}/hypr/{sig}/.socket2.sock")
+    for line in s.makefile(encoding="utf-8", errors="replace"):
+        event, _, data = line.rstrip("\n").partition(">>")
+        if event == "workspacev2":        # ID,NAME
+            show(data.split(",", 1)[1])
+        elif event == "focusedmonv2":     # MONITOR,WORKSPACE_ID
+            show(data.rsplit(",", 1)[1])

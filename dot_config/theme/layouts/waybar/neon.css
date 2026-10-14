@@ -1,0 +1,39 @@
+/* Layout "neon": a floating bar framed like the windows: same side gap, rounding and gradient
+   border (the gradient fills the window, the bar's box is inset by the border width). */
+{% set stops = look.border if look.border | length > 1 else look.border * 2 %}
+window#waybar {
+  background-color: transparent;
+  background-image: linear-gradient({{ look.border_angle + 90 }}deg, {% for role in stops %}#{{ p[role] }}{{ ", " if not loop.last }}{% endfor %});
+  border-radius: {{ look.rounding + look.border_size }}px;
+}
+
+window#waybar > box {
+  margin: {{ look.border_size }}px;
+  border-radius: {{ look.rounding }}px;
+  background-color: #{{ p.bg_dark }};
+  background-image: linear-gradient(to bottom, #{{ p.bg_alt }}, #{{ p.bg_dark }});
+}
+
+#custom-launcher, #custom-workspace, #custom-media, #custom-cava, #clock, #tray, #custom-updates,
+#backlight, #pulseaudio, #battery, #custom-theme, #custom-power {
+  padding: 0 10px;
+  color: #{{ p.fg }};
+}
+
+/* Each module glows in its own colour. */
+{% for sel, role in {
+  "#custom-launcher": "cyan", "#custom-workspace": "accent", "#custom-media": "pink", "#clock": "yellow",
+  "#custom-updates": "pink", "#backlight": "orange",
+  "#pulseaudio": "yellow", "#battery": "teal", "#custom-theme": "accent2", "#custom-power": "red",
+}.items() %}
+{{ sel }} { color: #{{ p[role] }}; text-shadow: 0 0 6px alpha(#{{ p[role] }}, 0.7); }
+{% endfor %}
+
+#custom-launcher { font-size: 18px; }
+#clock, #custom-workspace { font-weight: bold; }
+#custom-cava { letter-spacing: 1px; }
+#pulseaudio.muted { color: #{{ p.overlay }}; text-shadow: none; }
+#battery.warning:not(.charging) { color: #{{ p.orange }}; }
+#battery.critical:not(.charging) {
+  animation: blink 0.5s linear infinite alternate;
+}

@@ -15,13 +15,11 @@
 },
 "cpu": {
   "interval": 15,
-  "format": "\uf2db  {}%",
-  "max-length": 10
+  "format": "\uf2db  {}%"
 },
 "memory": {
   "interval": 30,
-  "format": "\uf0c9 {}%",
-  "max-length": 10
+  "format": "\uf0c9 {}%"
 },
 "backlight": {
   "tooltip": false,

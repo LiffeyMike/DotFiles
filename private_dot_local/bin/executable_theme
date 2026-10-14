@@ -208,6 +208,19 @@ def preview(t):
             c.rect(110 + i * 6, 24 - h, 4, h, p["accent"] if h > 6 else p["purple"])
         for i, role in enumerate(["accent", "orange", "yellow", "teal", "red"]):
             c.rect(480 - g - 100 + i * 18, 12, 12, 10, p[role])
+    elif t["layout"]["waybar"] == "islands":
+        g = 8 + look["gaps_out"] // 2  # three floating islands, edges in line with the windows
+        for x, w in [(g, 150), (190, 100), (480 - g - 130, 130)]:
+            c.rect(x, 4, w, 26, p["bg"], p["surface0"], bw)
+        c.rect(g + 8, 12, 10, 10, p["accent"])
+        c.rect(g + 26, 12, 22, 10, p["accent"])
+        for i in range(5):
+            c.rect(g + 56 + i * 16, 12, 8, 10, p["subtext"] if i < 2 else p["surface2"])
+        c.rect(206, 12, 30, 10, p["fg"])
+        c.rect(242, 12, 34, 10, p["subtext"])
+        for i, role in enumerate(["yellow", "blue", "green", "red"]):
+            c.rect(480 - g - 120 + i * 30, 12, 8, 10, p[role])
+            c.rect(480 - g - 108 + i * 30, 12, 12, 10, p["fg"])
     else:
         c.rect(0, 0, 480, 30, p["bg"])
         c.rect(0, 30, 480, 2, p["surface1"])

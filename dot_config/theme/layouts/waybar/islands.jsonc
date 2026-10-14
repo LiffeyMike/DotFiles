@@ -1,0 +1,51 @@
+// Layout "islands": three floating rounded islands lined up with the windows (gaps_out from the
+// screen edges). Icons carry the colour; text stays in the soft foreground. Modules that need
+// coloured icons are "#islands" instances so the shared definitions stay plain for other layouts.
+{
+  "layer": "top",
+  "position": "top",
+  "height": {{ 30 + 2 * look.border_size }},
+  "margin-top": {{ look.gaps_out }},
+  "margin-left": {{ look.gaps_out }},
+  "margin-right": {{ look.gaps_out }},
+  "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/media"],
+  "modules-center": ["clock#islands"],
+  "modules-right": ["tray", "custom/updates#islands", "backlight#islands", "pulseaudio#islands", "battery#islands", "custom/theme", "custom/power"],
+  "clock#islands": {
+    "format": "<b>{0:%H:%M}</b>  <span color='#{{ p.subtext }}'>{0:%a %d %b}</span>",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+  "custom/updates#islands": {
+    "format": "<span color='#{{ p.orange }}'>\uf0ed</span>  {}",
+    "tooltip-format": "Pending updates",
+    "exec": "checkupdates | wc -l",
+    "exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
+    "interval": 3600,
+    "on-click": "alacritty -e sudo pacman -Syu"
+  },
+  "backlight#islands": {
+    "tooltip": false,
+    "format": "<span color='#{{ p.yellow }}'></span>  {percent}%",
+    "on-scroll-up": "~/.config/hypr/scripts/buttons/bright+",
+    "on-scroll-down": "~/.config/hypr/scripts/buttons/bright-"
+  },
+  "pulseaudio#islands": {
+    "tooltip": false,
+    "scroll-step": 5,
+    "format": "<span color='#{{ p.blue }}'>{icon}</span>  {volume}%",
+    "format-muted": "<span color='#{{ p.overlay }}'>󰝟</span>  muted",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "format-icons": { "default": ["", "", ""] }
+  },
+  "battery#islands": {
+    "states": { "warning": 30, "critical": 15 },
+    "format": "<span color='#{{ p.green }}'>{icon}</span>  {capacity}%",
+    "format-warning": "<span color='#{{ p.orange }}'>{icon}</span>  {capacity}%",
+    "format-critical": "<span color='#{{ p.red }}'>{icon}</span>  {capacity}%",
+    "format-charging": "<span color='#{{ p.green }}'></span>  {capacity}%",
+    "format-plugged": "<span color='#{{ p.green }}'></span>  {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+  {% include "layouts/waybar/_shared.jsonc" %}
+}

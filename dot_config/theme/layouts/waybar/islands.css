@@ -1,0 +1,47 @@
+/* Layout "islands": the bar itself is invisible; its left, centre and right boxes are floating
+   islands with the window rounding and a quiet border. Calm surfaces, colour only on icons. */
+window#waybar {
+  background: transparent;
+}
+
+.modules-left, .modules-center, .modules-right {
+  background: #{{ p.bg }};
+  border: {{ look.border_size }}px solid #{{ p.surface0 }};
+  border-radius: {{ look.rounding + look.border_size }}px;
+  padding: 0 6px;
+}
+
+#custom-launcher, #custom-media, #clock, #tray, #custom-updates,
+#backlight, #pulseaudio, #battery, #custom-theme, #custom-power {
+  padding: 0 9px;
+  color: #{{ p.fg }};
+}
+
+#custom-launcher { color: #{{ p.accent }}; font-size: 18px; padding-right: 12px; }
+#custom-media { color: #{{ p.subtext }}; }
+#custom-theme { color: #{{ p.pink }}; }
+#custom-power { color: #{{ p.red }}; }
+
+#workspaces button {
+  color: #{{ p.subtext }};
+  padding: 0 7px;
+  margin: 5px 1px;
+  min-width: 0;
+  border-radius: {{ look.rounding }}px;
+  box-shadow: none;
+  text-shadow: none;
+  transition: all 0.2s ease;
+}
+#workspaces button.empty { color: #{{ p.surface2 }}; }
+#workspaces button.active {
+  color: #{{ p.bg_dark }};
+  background: #{{ p.accent }};
+  padding: 0 14px;
+}
+#workspaces button.urgent { color: #{{ p.bg_dark }}; background: #{{ p.red }}; }
+#workspaces button:hover { color: #{{ p.fg }}; background: #{{ p.surface0 }}; }
+#workspaces button.active:hover { color: #{{ p.bg_dark }}; background: #{{ p.accent }}; }
+
+#battery.critical:not(.charging) {
+  animation: blink 0.5s linear infinite alternate;
+}

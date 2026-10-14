@@ -34,7 +34,7 @@ color_scheme = "prefer-dark"     # GTK: prefer-dark | prefer-light | default
 icon_folders = "blue"   # Papirus folder colour: blue violet nordic orange indigo teal …
 
 [layout]
-waybar = "pills"        # pills | bar | neon  (layouts/waybar/<name>.jsonc + .css)
+waybar = "pills"        # pills | bar | neon | islands  (layouts/waybar/<name>.jsonc + .css)
 # neon only: cava visualiser bars filling the middle. Tuned for 14px JetBrainsMono on the
 # 1920px laptop panel; lower it if the bar overflows (bigger font), and keep it even.
 cava_bars = 132

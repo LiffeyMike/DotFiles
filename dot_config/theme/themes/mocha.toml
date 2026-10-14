@@ -39,3 +39,6 @@ accent2 = "89b4fa"
 magenta = "f5c2e7"
 white = "bac2de"
 cursor = "f5e0dc"
+
+[layout]
+waybar = "islands"

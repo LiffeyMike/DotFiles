@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "keybinds": {
+    "dialog.select.prev": ["up", "ctrl+p"],
+    "dialog.select.next": ["down", "ctrl+n"],
+    "prompt.autocomplete.prev": ["up", "ctrl+p"],
+    "prompt.autocomplete.next": ["down", "ctrl+n"],
+    "session.half.page.up": ["ctrl+u", "ctrl+alt+u"],
+    "session.half.page.down": ["ctrl+d", "ctrl+alt+d"],
+    "command.palette.show": "ctrl+k",
+    "session.tab.previous": ["ctrl+p", "ctrl+shift+tab", "alt+up"],
+    "session.tab.next": ["ctrl+n", "ctrl+tab", "alt+down"],
+    "session.tab.close": ["<leader>x", "<leader>w"],
+    "session.export": "none"
+  }
+}

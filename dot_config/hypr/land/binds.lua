@@ -26,7 +26,7 @@ hl.bind(
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
 hl.bind(M1 .. " + E", hl.dsp.exec_cmd("thunar"))
-hl.bind(M1 .. " + R", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/dock-recover --force")) -- un-wedge monitors after a dock drop
+hl.bind(M2 .. " + R", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/dock-recover --force")) -- un-wedge monitors after a dock drop
 hl.bind(M2 .. " + P", hl.dsp.window.pseudo())
 
 -- Window navigation

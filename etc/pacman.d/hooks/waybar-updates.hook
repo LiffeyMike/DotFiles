@@ -1,0 +1,13 @@
+# Make waybar's pending-updates module re-check after any transaction. Managed by chezmoi (etc/).
+# The module listens on SIGRTMIN+8 ("signal": 8 in layouts/waybar); otherwise it only polls hourly.
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Refreshing the waybar update count...
+When = PostTransaction
+Exec = /bin/sh -c 'pkill -RTMIN+8 -x waybar || true'

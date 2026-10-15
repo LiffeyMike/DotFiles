@@ -72,6 +72,7 @@
   "exec": "checkupdates | wc -l",
   "exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
   "interval": 3600,
+  "signal": 8,
   "on-click": "alacritty -e sudo pacman -Syu"
 },
 "custom/power": {

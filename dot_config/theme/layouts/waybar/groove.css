@@ -1,0 +1,65 @@
+/* Layout "groove": solid square bar on the darkest background with a yellow/orange/red stripe
+   along the bottom. The module boxes stop above the stripe so block backgrounds never cover it. */
+window#waybar {
+  background: linear-gradient(to top,
+    #{{ p.red }} 0px, #{{ p.red }} 2px,
+    #{{ p.orange }} 2px, #{{ p.orange }} 4px,
+    #{{ p.yellow }} 4px, #{{ p.yellow }} 6px,
+    #{{ p.bg_alt }} 6px);
+}
+
+.modules-left, .modules-center, .modules-right {
+  margin-bottom: 6px;
+}
+
+#custom-launcher, #custom-media, #clock, #tray, #custom-updates, #cpu, #memory,
+#backlight, #pulseaudio, #battery, #custom-theme, #custom-power {
+  padding: 0 11px;
+  color: #{{ p.fg }};
+}
+
+/* Readouts on the right are split by thin rules. */
+#custom-updates, #cpu, #memory, #backlight, #pulseaudio, #battery, #custom-theme {
+  border-left: 1px solid #{{ p.surface1 }};
+  margin: 5px 0;
+}
+
+#custom-launcher {
+  background: #{{ p.orange }};
+  color: #{{ p.bg_dark }};
+  font-size: 18px;
+  padding: 0 10px 0 14px;
+}
+#custom-media { color: #{{ p.subtext }}; font-style: italic; }
+#clock { color: #{{ p.fg }}; }
+#custom-theme { color: #{{ p.purple }}; }
+#custom-power {
+  background: #{{ p.red }};
+  color: #{{ p.bg_dark }};
+  padding: 0 10px 0 14px;
+}
+
+/* Workspaces are hardware keys: dim when empty, cream when occupied, lit yellow when active. */
+#workspaces { margin-left: 6px; }
+#workspaces button {
+  color: #{{ p.fg }};
+  padding: 0 9px;
+  min-width: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: none;
+  transition: none;
+}
+#workspaces button.empty { color: #{{ p.surface2 }}; }
+#workspaces button.active {
+  color: #{{ p.bg_dark }};
+  background: #{{ p.yellow }};
+  font-weight: bold;
+}
+#workspaces button.urgent { color: #{{ p.bg_dark }}; background: #{{ p.red }}; }
+#workspaces button:hover { color: #{{ p.fg }}; background: #{{ p.surface0 }}; }
+#workspaces button.active:hover { color: #{{ p.bg_dark }}; background: #{{ p.yellow }}; }
+
+#battery.critical:not(.charging) {
+  animation: blink 0.5s linear infinite alternate;
+}

@@ -1,0 +1,56 @@
+// Layout "groove": a solid square bar with a 70s yellow/orange/red stripe along the bottom
+// (drawn in CSS). Launcher and power are solid blocks; the right side is a row of readouts
+// with coloured icons split by thin rules. Coloured icons need "#groove" module instances.
+{
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/media"],
+  "modules-center": ["clock#groove"],
+  "modules-right": ["tray", "custom/updates#groove", "cpu#groove", "memory#groove", "backlight#groove", "pulseaudio#groove", "battery#groove", "custom/theme", "custom/power"],
+  "clock#groove": {
+    "format": "<b>{0:%H:%M}</b>  <span color='#{{ p.overlay }}'>{0:%a %d %b}</span>",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+  "custom/updates#groove": {
+    "format": "<span color='#{{ p.purple }}'></span>  {}",
+    "tooltip-format": "Pending updates",
+    "exec": "checkupdates | wc -l",
+    "exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
+    "interval": 3600,
+    "on-click": "alacritty -e sudo pacman -Syu"
+  },
+  "cpu#groove": {
+    "interval": 15,
+    "format": "<span color='#{{ p.blue }}'></span>  {usage}%"
+  },
+  "memory#groove": {
+    "interval": 30,
+    "format": "<span color='#{{ p.cyan }}'></span>  {percentage}%"
+  },
+  "backlight#groove": {
+    "tooltip": false,
+    "format": "<span color='#{{ p.yellow }}'></span>  {percent}%",
+    "on-scroll-up": "~/.config/hypr/scripts/buttons/bright+",
+    "on-scroll-down": "~/.config/hypr/scripts/buttons/bright-"
+  },
+  "pulseaudio#groove": {
+    "tooltip": false,
+    "scroll-step": 5,
+    "format": "<span color='#{{ p.orange }}'>{icon}</span>  {volume}%",
+    "format-muted": "<span color='#{{ p.overlay }}'>󰝟</span>  muted",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "format-icons": { "default": ["", "", ""] }
+  },
+  "battery#groove": {
+    "states": { "warning": 30, "critical": 15 },
+    "format": "<span color='#{{ p.green }}'>{icon}</span>  {capacity}%",
+    "format-warning": "<span color='#{{ p.yellow }}'>{icon}</span>  {capacity}%",
+    "format-critical": "<span color='#{{ p.red }}'>{icon}</span>  {capacity}%",
+    "format-charging": "<span color='#{{ p.green }}'></span>  {capacity}%",
+    "format-plugged": "<span color='#{{ p.green }}'></span>  {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+  {% include "layouts/waybar/_shared.jsonc" %}
+}

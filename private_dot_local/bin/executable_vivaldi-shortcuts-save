@@ -1,0 +1,14 @@
+#!/bin/bash
+# vivaldi-shortcuts-save: copy Vivaldi's keyboard shortcuts, page-priority shortcuts and
+# command chains from its Preferences into the chezmoi repo (vivaldi/shortcuts.json).
+# chezmoi apply merges them back in. Vivaldi writes Preferences a few seconds after a
+# settings change; close it first to be sure the file is current.
+set -euo pipefail
+
+prefs="$HOME/.config/vivaldi/Default/Preferences"
+out="$(chezmoi source-path)/vivaldi/shortcuts.json"
+
+jq '{actions: .vivaldi.actions, keyboard: .vivaldi.keyboard, chained_commands: .vivaldi.chained_commands}' \
+	"$prefs" >"$out.tmp"
+mv "$out.tmp" "$out"
+chezmoi git -- diff --stat -- vivaldi/shortcuts.json

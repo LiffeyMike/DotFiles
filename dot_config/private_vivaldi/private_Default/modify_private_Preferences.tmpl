@@ -1,0 +1,36 @@
+#!/bin/sh
+# Merge vivaldi/shortcuts.json (keyboard shortcuts, page-priority shortcuts, command chains)
+# into Vivaldi's Preferences and leave the rest of the file alone. chezmoi pipes the current
+# file in and writes back what this prints. Save changes made in Vivaldi with vivaldi-shortcuts-save.
+set -eu
+src="{{ .chezmoi.sourceDir }}/vivaldi/shortcuts.json"
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+cat >"$tmp"
+
+# No profile yet (fresh install): let Vivaldi create it first, then apply again.
+[ -s "$tmp" ] || exit 0
+# jq is installed by the packages script, which runs after files on a first apply.
+if ! command -v jq >/dev/null; then
+	cat "$tmp"
+	exit 0
+fi
+
+# jq doesn't reproduce the file byte for byte, so pass it through untouched when it already matches.
+if jq -e --slurpfile s "$src" '.vivaldi.actions == $s[0].actions
+	and .vivaldi.keyboard == $s[0].keyboard
+	and .vivaldi.chained_commands == $s[0].chained_commands' "$tmp" >/dev/null; then
+	cat "$tmp"
+	exit 0
+fi
+
+# Vivaldi rewrites Preferences from memory, so a change made while it runs would be lost.
+if pgrep -x vivaldi-bin >/dev/null; then
+	echo "vivaldi shortcuts: close Vivaldi, then chezmoi apply again" >&2
+	cat "$tmp"
+	exit 0
+fi
+
+jq -c --slurpfile s "$src" '.vivaldi.actions = $s[0].actions
+	| .vivaldi.keyboard = $s[0].keyboard
+	| .vivaldi.chained_commands = $s[0].chained_commands' "$tmp"

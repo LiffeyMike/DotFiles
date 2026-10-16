@@ -42,9 +42,9 @@ return {
 						hl.bg = nil
 						vim.api.nvim_set_hl(0, group, hl)
 					end
-					-- Snacks dims hidden/ignored paths with NonText, which this scheme sets to its own
-					-- background colour; Comment keeps them dimmed but readable.
-					for _, group in ipairs({ "SnacksPickerPathHidden", "SnacksPickerPathIgnored", "SnacksPickerGitStatusIgnored" }) do
+					-- Snacks dims hidden/ignored paths and LSP inlay hints link NonText, which this scheme
+					-- sets to its own background colour; Comment keeps them dimmed but readable.
+					for _, group in ipairs({ "SnacksPickerPathHidden", "SnacksPickerPathIgnored", "SnacksPickerGitStatusIgnored", "LspInlayHint" }) do
 						vim.api.nvim_set_hl(0, group, { link = "Comment" })
 					end
 				end,

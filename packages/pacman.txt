@@ -30,8 +30,6 @@ docker
 docker-buildx
 docker-compose
 dunst
-efivar
-evtest
 fastfetch
 fd
 flatpak
@@ -42,7 +40,7 @@ ghostty
 git
 git-filter-repo
 gradle
-helvum
+grim
 hypridle
 hyprland
 hyprlock
@@ -62,8 +60,6 @@ linux-cachyos
 linux-cachyos-headers
 linux-firmware
 linux-headers
-linuxconsole
-lshw
 lutris
 man-db
 man-pages
@@ -83,17 +79,13 @@ pavucontrol
 pgcli
 pipewire-alsa
 pipewire-pulse
-postgresql
 python-jinja
-qjackctl
 ripgrep
 rofi
 rustup
 sc3-plugins
 scx-scheds
 slurp
-sox
-speedtest-cli
 spotify-launcher
 sshfs
 steam
@@ -104,7 +96,6 @@ thunar
 tmux
 ttf-jetbrains-mono-nerd
 ttf-liberation-mono-nerd
-ttf-noto-nerd
 umu-launcher
 unzip
 uv
@@ -120,5 +111,4 @@ wlogout
 wtype
 xclip
 xdg-desktop-portal-hyprland
-xdg-desktop-portal-wlr
 zsh

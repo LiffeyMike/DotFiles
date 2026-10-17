@@ -58,10 +58,25 @@ hl.window_rule({
 	workspace = "7 silent",
 })
 
+-- Arma 3: launcher and game open on workspace 3.
+hl.window_rule({
+	name = "arma3-ws",
+	match = { class = "^(steam_app_107410)$" },
+	workspace = "3",
+})
+
 -- Keep the pointer inside the game window so it can't slide onto the other
--- monitors mid-game. Matches any Steam game (steam_app_<id>) and native Dota 2.
+-- monitors mid-game. Matches any Steam game (steam_app_<id>) and native Dota 2,
+-- but only while fullscreen: confining a launcher left its pop-ups unclickable.
 hl.window_rule({
 	name = "game-confine-pointer",
-	match = { class = "^(steam_app_[0-9]+|dota2)$" },
+	match = { class = "^(steam_app_[0-9]+|dota2)$", fullscreen = true },
 	confine_pointer = true,
+})
+
+-- Let game pop-ups (crash reports, error dialogs) take focus when they ask for it.
+hl.window_rule({
+	name = "game-popup-focus",
+	match = { class = "^(steam_app_[0-9]+)$", float = true },
+	focus_on_activate = true,
 })

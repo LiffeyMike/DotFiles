@@ -73,9 +73,11 @@ def run(*cmd):
         pass
 
 
-def notify(title, body, urgency="low", timeout_ms=None):
+def notify(title, body, urgency="low", timeout_ms=None, tag=None):
     timeout = ["-t", str(timeout_ms)] if timeout_ms else []
-    run("notify-send", "-a", "theme", "-u", urgency, *timeout, title, body)
+    # dunst replaces a shown notification that has the same stack tag instead of adding one.
+    stack = ["-h", f"string:x-dunst-stack-tag:{tag}"] if tag else []
+    run("notify-send", "-a", "theme", "-u", urgency, *timeout, *stack, title, body)
 
 
 # --- theme data ---------------------------------------------------------------------------
@@ -329,7 +331,7 @@ def activate(theme_id, reload=True):
         # alacritty only watches its own config; touching it re-reads the imported theme.
         (HOME / ".config/alacritty/alacritty.toml").touch()
         apply_gtk(t)
-        notify("Theme", t["name"], timeout_ms=2000)
+        notify("Theme", t["name"], timeout_ms=2000, tag="theme")
     return t
 
 

@@ -1,0 +1,20 @@
+#!/bin/sh
+# Run by dunst for each blueman notification (dunstrc.d/40-bluetooth.conf). Finds the paired
+# device the notification mentions and closes the previous notification about that device,
+# so connect, disconnect and battery updates for one device show as a single notification.
+state=${XDG_RUNTIME_DIR:-/tmp}/dunst-bluetooth
+mkdir -p "$state"
+text="$DUNST_SUMMARY
+$DUNST_BODY"
+
+# timeout: bluetoothctl waits forever when bluetoothd isn't running.
+timeout 2 bluetoothctl devices | while read -r _ mac name; do
+	case $text in
+	*"$name"*)
+		last=$(cat "$state/$mac" 2>/dev/null)
+		[ -n "$last" ] && [ "$last" != "$DUNST_ID" ] && dunstctl close "$last" 2>/dev/null
+		echo "$DUNST_ID" >"$state/$mac"
+		break
+		;;
+	esac
+done

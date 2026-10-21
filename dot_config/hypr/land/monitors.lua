@@ -3,6 +3,7 @@
 
 local MIDDLE = "desc:Microstep MSI MAG 27C6X CE0M035805785"
 local RIGHT = "desc:Dell Inc. DELL U2419H 8M8RT83"
+local TV = "desc:Hisense Electric Co. Ltd. HISENSE 0x00000001"
 
 local power = require("land.power")
 
@@ -35,6 +36,17 @@ hl.monitor({
 	scale = 1,
 })
 
+-- Hisense TV on the laptop's HDMI port (wired to the NVIDIA GPU, not the iGPU).
+-- Its HDMI input advertises HDMI 1.4 only (300 MHz TMDS), so 4K tops out at 30Hz,
+-- which is what "preferred" picks and looks choppy. 1080p@60 is smooth. If the TV's
+-- input is switched to HDMI 2.0 "Enhanced" mode, 3840x2160@60 at scale 2 becomes possible.
+hl.monitor({
+	output = TV,
+	mode = "1920x1080@60",
+	position = "auto-right",
+	scale = 1,
+})
+
 -- Catch-all for anything else that gets plugged in.
 hl.monitor({
 	output = "",
@@ -44,9 +56,9 @@ hl.monitor({
 })
 
 -- Workspace homes, all persistent. Rules only apply when a workspace is created,
--- so a workspace that fell back to the laptop while its monitor was unplugged
--- (or the dock dropped) would stay there; the monitor.added hook below moves
--- every workspace back home when its monitor returns.
+-- and a workspace whose monitor is missing lands wherever Hyprland picks, so the
+-- hooks below move every workspace to its first connected home whenever a
+-- monitor comes or goes, or a workspace is created. A list is tried in order.
 local LAPTOP = "eDP-1"
 local HOMES = {
 	["1"] = LAPTOP,
@@ -58,29 +70,57 @@ local HOMES = {
 	["7"] = RIGHT,
 	["8"] = RIGHT,
 	["9"] = RIGHT,
-	["10"] = LAPTOP,
+	["10"] = { TV, LAPTOP }, -- Super+0: on the TV when it's plugged in, else the laptop
 }
 
 for ws, mon in pairs(HOMES) do
-	hl.workspace_rule({ workspace = ws, monitor = mon, persistent = true })
+	hl.workspace_rule({ workspace = ws, monitor = type(mon) == "table" and mon[1] or mon, persistent = true })
 end
 
--- Map a selector ("eDP-1" or "desc:...") to the connected output's name.
-local function output_for(selector)
+-- Map a selector ("eDP-1" or "desc:...") to the connected output's name, ignoring
+-- `gone` (a monitor being removed can still be listed while its event runs).
+local function output_for(selector, gone)
 	for _, m in ipairs(hl.get_monitors()) do
-		if selector == m.name or selector == "desc:" .. m.description then
+		if m.name ~= gone and (selector == m.name or selector == "desc:" .. m.description) then
 			return m.name
 		end
 	end
 end
 
-hl.on("monitor.added", function()
+local function first_connected(home, gone)
+	for _, selector in ipairs(type(home) == "table" and home or { home }) do
+		local name = output_for(selector, gone)
+		if name then
+			return name
+		end
+	end
+end
+
+local function rehome(gone)
 	for _, w in ipairs(hl.get_workspaces()) do
 		local home = HOMES[tostring(w.id)]
-		local target = home and output_for(home)
+		local target = home and first_connected(home, gone)
 		if target and (not w.monitor or w.monitor.name ~= target) then
 			hl.dispatch(hl.dsp.workspace.move({ workspace = tostring(w.id), monitor = target }))
 		end
 	end
+end
+
+hl.on("monitor.added", function()
+	rehome()
 end)
 
+hl.on("monitor.removed", function(m)
+	local ok, name = pcall(function()
+		return m.name
+	end)
+	rehome(ok and name or nil)
+end)
+
+hl.on("workspace.created", function()
+	rehome()
+end)
+
+
+-- Also on load, so a config reload fixes placement without replugging anything.
+rehome()

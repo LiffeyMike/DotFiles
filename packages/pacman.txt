@@ -21,6 +21,7 @@ cava
 chezmoi
 chromium
 cliphist
+cmake
 cpu-x
 deluge
 deluge-gtk
@@ -102,6 +103,7 @@ uv
 uwsm
 vim
 vivaldi
+vulkan-headers
 vulkan-intel
 vulkan-mesa-implicit-layers
 waybar
